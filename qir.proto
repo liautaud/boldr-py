@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+/**
+ * The different types of QIR values.
+ */
+message Null {}
+message Number { int32 value = 1; }
+message Double { double value = 1; }
+message String { string value = 1; }
+message Boolean { bool value = 1; }
+
+/**
+ * The different types of QIR operators.
+ */
+message Scan {
+	Expression table = 1;
+}
+
+message Select {
+	Expression filter = 1;
+	Expression input = 2;
+}
+
+message Project {
+	Expression format = 1;
+	Expression input = 2;
+}
+
+message Sort {
+	Expression comp = 1;
+	Expression input = 2;
+}
+
+message Limit {
+	Expression limit = 1;
+	Expression input = 2;
+}
+
+message Group {
+	Expression eq = 1;
+	Expression agg = 2;
+	Expression input = 3;
+}
+
+message Join {
+	Expression filter = 1;
+	Expression left = 2;
+	Expression right = 3;
+}
+
+/**
+ * The different types of QIR functional nodes.
+ */
+message Identifier {
+	string name = 1;
+}
+
+message Lambda {
+	Identifier parameter = 1;
+	Expression body = 2;
+}
+
+message Application {
+	Expression function = 1;
+	Expression argument = 2;
+}
+
+message Conditional {
+	Expression condition = 1;
+	Expression on_true = 2;
+	Expression on_false = 3;
+}
+
+/**
+ * The different types of QIR list nodes.
+ */
+message ListNil {}
+
+message ListCons {
+	Expression head = 1;
+	Expression tail = 2;
+}
+
+message ListDestr {
+	Expression input = 1;
+	Expression on_nil = 2;
+	Expression on_cons = 3;
+}
+
+/**
+ * The different types of QIR named tuple nodes.
+ */
+message TupleNil {}
+
+message TupleCons {
+	Expression key = 1;
+	Expression value = 2;
+	Expression tail = 3;
+}
+
+message TupleDestr {
+	Expression input = 1;
+	Expression key = 2;
+}
+
+/**
+ * Other special nodes supported by the QIR.
+ */
+message Builtin {
+	string module = 1;
+	string name = 2;
+}
+
+message Reference  {
+	string input = 1;
+	string identifier = 2;
+}
+
+/**
+ * A QIR expression.
+ */
+message Expression {
+	oneof node {
+		Null Null_node = 1;
+		Number Number_node = 2;
+		Double Double_node = 3;
+		String String_node = 4;
+		Boolean Boolean_node = 5;
+		Scan Scan_node = 6;
+		Select Select_node = 7;
+		Project Project_node = 8;
+		Sort Sort_node = 9;
+		Limit Limit_node = 10;
+		Group Group_node = 11;
+		Join Join_node = 12;
+		Identifier Identifier_node = 13;
+		Lambda Lambda_node = 14;
+		Application Application_node = 15;
+		Conditional Conditional_node = 16;
+		ListNil ListNil_node = 17;
+		ListCons ListCons_node = 18;
+		ListDestr ListDestr_node = 19;
+		TupleNil TupleNil_node = 20;
+		TupleCons TupleCons_node = 21;
+		TupleDestr TupleDestr_node = 22;
+		Builtin Builtin_node = 23;
+		Reference Reference_node = 24;
+	}
+}
+
+/**
+ * A remote QIR evaluation service.
+ */
+service Evaluator {
+	rpc Evaluate (Expression) return (Expression) {}
+}
