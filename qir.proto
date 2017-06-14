@@ -152,5 +152,5 @@ message Expression {
  * A remote QIR evaluation service.
  */
 service Evaluator {
-	rpc Evaluate (Expression) return (Expression) {}
+	rpc Evaluate (Expression) returns (Expression) {}
 }
