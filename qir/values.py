@@ -28,19 +28,19 @@ class Null(Value):
 
 class Number(Value):
     """ A QIR expression representing an integer value. """
-    fields = (('value', int))
+    fields = (('value', int),)
 
 
 class Double(Value):
     """ A QIR expression representing a floating point value. """
-    fields = (('value', int))
+    fields = (('value', int),)
 
 
 class String(Value):
     """ A QIR expression representing a string value. """
-    fields = (('value', str))
+    fields = (('value', str),)
 
 
 class Boolean(Value):
     """ A QIR expression representing a boolean value. """
-    fields = (('value', bool))
+    fields = (('value', bool),)

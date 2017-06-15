@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 -m grpc_tools.protoc -I. --python_out=generated --grpc_python_out=generated qir.proto
+python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. qir.proto

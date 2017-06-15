@@ -56,7 +56,7 @@ message Identifier {
 }
 
 message Lambda {
-	Identifier parameter = 1;
+	Expression parameter = 1;
 	Expression body = 2;
 }
 
@@ -121,30 +121,30 @@ message Reference  {
  */
 message Expression {
 	oneof node {
-		Null Null_node = 1;
-		Number Number_node = 2;
-		Double Double_node = 3;
-		String String_node = 4;
-		Boolean Boolean_node = 5;
-		Scan Scan_node = 6;
-		Select Select_node = 7;
-		Project Project_node = 8;
-		Sort Sort_node = 9;
-		Limit Limit_node = 10;
-		Group Group_node = 11;
-		Join Join_node = 12;
-		Identifier Identifier_node = 13;
-		Lambda Lambda_node = 14;
-		Application Application_node = 15;
-		Conditional Conditional_node = 16;
-		ListNil ListNil_node = 17;
-		ListCons ListCons_node = 18;
-		ListDestr ListDestr_node = 19;
-		TupleNil TupleNil_node = 20;
-		TupleCons TupleCons_node = 21;
-		TupleDestr TupleDestr_node = 22;
-		Builtin Builtin_node = 23;
-		Reference Reference_node = 24;
+		Null Null = 1;
+		Number Number = 2;
+		Double Double = 3;
+		String String = 4;
+		Boolean Boolean = 5;
+		Scan Scan = 6;
+		Select Select = 7;
+		Project Project = 8;
+		Sort Sort = 9;
+		Limit Limit = 10;
+		Group Group = 11;
+		Join Join = 12;
+		Identifier Identifier = 13;
+		Lambda Lambda = 14;
+		Application Application = 15;
+		Conditional Conditional = 16;
+		ListNil ListNil = 17;
+		ListCons ListCons = 18;
+		ListDestr ListDestr = 19;
+		TupleNil TupleNil = 20;
+		TupleCons TupleCons = 21;
+		TupleDestr TupleDestr = 22;
+		Builtin Builtin = 23;
+		Reference Reference = 24;
 	}
 }
 

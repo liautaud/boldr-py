@@ -1,8 +1,11 @@
 from . import errors
 
-# TODO: Debug only!
+import grpc
+import qir_pb2_grpc
+
 SERVER_HOST = 'localhost'
-SERVER_PORT = 4242
+SERVER_PORT = 50051
+
 
 # TODO:
 # - Finding a way to evaluate lambda functions locally without dirty hacks,
@@ -15,21 +18,6 @@ SERVER_PORT = 4242
 #   as late as possible.
 # - Handling the encoding and decoding of QIR expressions to native Python
 #   values.
-
-def serialize(expression):
-    raise errors.NotYetImplementedError
-
-
-def unserialize(str):
-    raise errors.NotYetImplementedError
-
-
-def encode(value):
-    raise errors.NotYetImplementedError
-
-
-def decode(expression):
-    return expression.decode()
 
 
 class Expression:
@@ -48,16 +36,14 @@ class Expression:
             raise TypeError
 
         for field, argument in zip(self.fields, args):
-            parameter, constraint = field
-
-            if not isinstance(argument, constraint):
+            if not isinstance(argument, field[1]):
                 raise TypeError
 
-            setattr(self, parameter, argument)
+            setattr(self, field[0], argument)
 
     def __repr__(self):
-        args = [getattr(self, parameter) for (parameter, _) in self.fields]
-        return self.__class__.__name__ + ' (' + ', '.join(args) + ')'
+        args = [repr(getattr(self, field[0])) for field in self.fields]
+        return self.__class__.__name__ + '(' + ', '.join(args) + ')'
 
     def evaluate(self, environment={}):
         """
@@ -74,6 +60,7 @@ class Expression:
         """
         try:
             return self.evaluate_remotely(environment)
+
         except errors.NotRemotelyEvaluableError:
             return self.evaluate_locally(environment)
 
@@ -86,7 +73,15 @@ class Expression:
         serialized QIR expression, which we finally unserialize.
         """
         # TODO: Handle the environment properly. This will suck.
-        return 
+        try:
+            address = SERVER_HOST + ':' + str(SERVER_PORT)
+            channel = grpc.insecure_channel(address)
+            stub = qir_pb2_grpc.EvaluatorStub(channel)
+
+            return unserialize(stub.Evaluate(serialize(self)))
+
+        except errors.NotSerializableError:
+            raise errors.NotRemotelyEvaluableError
 
     def evaluate_locally(self, environment):
         """
@@ -111,3 +106,7 @@ class Expression:
 
     def decode(self):
         raise errors.NotDecodableError
+
+
+class UnserializableExpression(Expression):
+    pass

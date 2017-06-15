@@ -6,7 +6,7 @@ import types
 
 class Identifier(base.Expression):
     """ A QIR expression representing the name of a variable. """
-    fields = (('name', str))
+    fields = (('name', str),)
 
     def evaluate_locally(self, environment):
         raise errors.NotYetImplementedError

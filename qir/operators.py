@@ -21,7 +21,7 @@ class Scan(Operator):
     When evaluated, Scan(table) will output the unordered list of elements in
     the target table corresponding to table.
     """
-    fields = (('table', base.Expression))
+    fields = (('table', base.Expression),)
 
     def evaluate_locally(self, environment):
         raise errors.NotYetImplementedError

@@ -3,17 +3,20 @@ from . import errors
 import types
 
 
-class Local(base.Expression):
+class Local(base.UnserializableExpression):
     """
-    A special QIR expression which wraps any type of Python value which can
-    not be serialized, and thus should only be evaluated locally.
+    A special QIR expression which wraps any type of Python value which can't
+    be serialized, and thus must only be evaluated locally.
     """
-    fields = (('value', object))
+    fields = (('value', object),)
 
     def evaluate_locally(self, environment):
         return self
 
     def evalutate_remotely(self):
+        # TODO: This approach (hijacking the evaluate_remotely function) won't
+        # work because be might serialize from a parent. We should hijack the
+        # serialize() function once it exists.
         raise errors.NotRemotelyEvaluableError
 
     def decode(self):
@@ -25,7 +28,7 @@ class Builtin(base.Expression):
     fields = (
         ('module', str),
         ('name', str),
-        ('function', types.BuiltinFunctionType))
+        ('function', types.BuiltinFunctionType, False))
 
     def evaluate_locally(self, environment):
         return Local(self.function)
@@ -33,10 +36,10 @@ class Builtin(base.Expression):
 
 class Bytecode(base.Expression):
     """ A QIR expression representing CPython bytecode. """
-    fields = (('code', types.CodeType))
+    fields = (('code', types.CodeType),)
 
     def __repr__(self):
-        return 'Bytecode (◾)'
+        return 'Bytecode(...)'
 
     def evaluate_locally(self, environment):
         raise errors.NotYetImplementedError

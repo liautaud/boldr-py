@@ -5,6 +5,14 @@ class NotYetImplementedError(NotImplementedError):
     """
 
 
+class NotUnserializableError(Exception):
+    pass
+
+
+class NotSerializableError(Exception):
+    pass
+
+
 class NotRemotelyEvaluableError(Exception):
     """
     An exception indicating that a QIR expression can't be evaluated remotely.
