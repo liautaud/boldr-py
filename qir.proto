@@ -16,19 +16,20 @@ message Scan {
 	Expression table = 1;
 }
 
-message Select {
-	Expression filter = 1;
-	Expression input = 2;
-}
-
 message Project {
 	Expression format = 1;
 	Expression input = 2;
 }
 
-message Sort {
-	Expression comp = 1;
+message Filter {
+	Expression filter = 1;
 	Expression input = 2;
+}
+
+message Sort {
+	Expression rows = 1;
+	Expression ascending = 2;
+	Expression input = 3;
 }
 
 message Limit {
@@ -37,9 +38,8 @@ message Limit {
 }
 
 message Group {
-	Expression eq = 1;
-	Expression agg = 2;
-	Expression input = 3;
+	Expression rows = 1;
+	Expression input = 2;
 }
 
 message Join {
@@ -107,13 +107,12 @@ message TupleDestr {
  * Other special nodes supported by the QIR.
  */
 message Builtin {
-	string module = 1;
-	string name = 2;
+	string name = 1;
 }
 
-message Reference  {
-	string input = 1;
-	string identifier = 2;
+message Table  {
+	string database = 1;
+	string table = 2;
 }
 
 /**
@@ -127,7 +126,7 @@ message Expression {
 		String String = 4;
 		Boolean Boolean = 5;
 		Scan Scan = 6;
-		Select Select = 7;
+		Filter Filter = 7;
 		Project Project = 8;
 		Sort Sort = 9;
 		Limit Limit = 10;
@@ -144,7 +143,7 @@ message Expression {
 		TupleCons TupleCons = 21;
 		TupleDestr TupleDestr = 22;
 		Builtin Builtin = 23;
-		Reference Reference = 24;
+		Table Table = 24;
 	}
 }
 

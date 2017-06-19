@@ -3,8 +3,8 @@ from . import errors
 import grpc
 import qir_pb2_grpc
 
-SERVER_HOST = 'localhost'
-SERVER_PORT = 50051
+SERVER_HOST = '127.0.0.1'
+SERVER_PORT = 8080
 
 
 # TODO:
@@ -65,6 +65,8 @@ class Expression:
             return self.evaluate_locally(environment)
 
     def evaluate_remotely(self, environment):
+        from . import utils
+
         """
         Evaluate the QIR expression on a remote QIR server.
 
@@ -78,7 +80,7 @@ class Expression:
             channel = grpc.insecure_channel(address)
             stub = qir_pb2_grpc.EvaluatorStub(channel)
 
-            return unserialize(stub.Evaluate(serialize(self)))
+            return utils.unserialize(stub.Evaluate(utils.serialize(self)))
 
         except errors.NotSerializableError:
             raise errors.NotRemotelyEvaluableError

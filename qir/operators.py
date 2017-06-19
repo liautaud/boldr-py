@@ -27,11 +27,11 @@ class Scan(Operator):
         raise errors.NotYetImplementedError
 
 
-class Select(Operator):
+class Filter(Operator):
     """
-    A QIR expression representing the Select operator of relational algebra.
+    A QIR expression representing the Filter operator of relational algebra.
 
-    When evaluated, Select(filter, input) will output the list of elements v
+    When evaluated, Filter(filter, input) will output the list of elements v
     in the list corresponding to input such that filter(v) reduces to true.
     """
     fields = (
@@ -62,11 +62,14 @@ class Sort(Operator):
     """
     A QIR expression representing the Sort operator of relational algebra.
 
-    When evaluated, Sort(comp, input) will output the list of elements v in
-    the list corresponding to input ordered according to comp(v) ascending.
+    When evaluated, Sort(rows, ascending, input) will output the list of
+    elements v in the list corresponding to input ordered based on the rows of
+    the list corresponding to rows, in ascending or descending ordering
+    depending on ascending.
     """
     fields = (
-        ('comp', base.Expression),
+        ('rows', base.Expression),
+        ('ascending', base.Expression),
         ('input', base.Expression))
 
     def evaluate_locally(self, environment):
@@ -78,7 +81,7 @@ class Limit(Operator):
     A QIR expression representing the Limit operator of relational algebra.
 
     When evaluated, Limit(limit, input) will output the list of the first
-    limit elemenst of the list corresponding to input.
+    limit elements of the list corresponding to input.
     """
     fields = (
         ('limit', base.Expression),
@@ -92,13 +95,12 @@ class Group(Operator):
     """
     A QIR expression representing the Group operator of relational algebra.
 
-    When evaluated, Group(eq, agg, input) will output the list of elements
-    corresponding to agg(g) for each group g in the partition of the elements
-    v in the list corresponding to input, according to eq(v).
+    When evaluated, Group(rows, input) will output the list of elements v in
+    the list corresponding to input, grouped by the rows in the list
+    corresponding to rows.
     """
     fields = (
-        ('eq', base.Expression),
-        ('agg', base.Expression),
+        ('rows', base.Expression),
         ('input', base.Expression))
 
     def evaluate_locally(self, environment):

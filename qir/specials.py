@@ -26,7 +26,7 @@ class Local(base.UnserializableExpression):
 class Builtin(base.Expression):
     """ A QIR expression representing a Python builtin function. """
     fields = (
-        ('module', str),
+        ('module', str, False),
         ('name', str),
         ('function', types.BuiltinFunctionType, False))
 
@@ -45,11 +45,11 @@ class Bytecode(base.Expression):
         raise errors.NotYetImplementedError
 
 
-class Reference(base.Expression):
-    """ A QIR expression representing a reference to data from a database. """
+class Table(base.Expression):
+    """ A QIR expression representing a reference to a database table. """
     fields = (
-        ('input', str),
-        ('identifier', str))
+        ('database', str),
+        ('table', str))
 
     def evaluate_locally(self, environment):
         raise errors.NotLocallyEvaluableError
