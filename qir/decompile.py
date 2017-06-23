@@ -2,17 +2,15 @@ import dis
 import graphviz
 
 
-MOD_NEXT_LINE = 0
-MOD_ALWAYS_JUMP = 1
-MOD_DID_JUMP = 2
-MOD_DID_NOT_JUMP = 3
+NORMAL_FLOW = 0
+JUMP_FLOW = 1
 
-ALWAYS_JUMP_OPNAMES = [
+JUMP_OPNAMES = [
     'JUMP_FORWARD',
     'JUMP_ABSOLUTE',
     'CONTINUE_LOOP']
 
-COND_JUMP_OPNAMES = [
+BRANCH_OPNAMES = [
     'POP_JUMP_IF_TRUE',
     'POP_JUMP_IF_FALSE',
     'JUMP_IF_TRUE_OR_POP',
@@ -20,148 +18,211 @@ COND_JUMP_OPNAMES = [
     'FOR_ITER']
 
 
-class Block():
-    pass
+class Decompiler():
+    def __init__(self):
+        self.blocks = []
+        self.edges = []
 
-class LinearBlock():
-    pass
+        # In order to be able to compute the graph in linear time, we keep a
+        # mapping of the block in which any instruction is contained.
+        self.block_mapping = {}
 
-class BranchingBlock():
-    pass
+    @property
+    def first_block(self):
+        return self.blocks[0]
 
+    @property
+    def previous_block(self):
+        return self.blocks[-2]
 
-def cfg(code):
-    # The vertices of the control flow graph will be blocks of "linear
-    # instructions", i.e. instructions which are necessarily executed one
-    # after the other.
-    vertices = []
+    @property
+    def current_block(self):
+        return self.blocks[-1]
 
-    # The edges of the control flow graph, which will be stored as adjacency
-    # lists, will represent the possible jumps between blocks.
-    edges = []
+    def build_graph(self, instructions):
+        """
+        Separate the instructions into blocks and build a control flow graph.
+        """
 
-    # In order to be able to compute the graph in linear time, we keep a
-    # mapping of the block in which any instruction is contained, as well as
-    # the offset of the instruction after any instruction.
-    block_mapping = {}
-    next_mapping = {}
+        # The offset before which all next instructions should be added to the
+        # current block as is, no matter its type.
+        ignore_until = False
 
-    current_block = []
-    current_jumps = []
+        # Whether to start a new block on the next instruction, even if it is
+        # not a jump target.
+        force_new = True
 
-    previous_offset = -1
-    previous_instruction = None
+        for instruction in instructions:
+            if instruction.offset < ignore_until:
+                self.current_block.add(instruction)
 
-    def new_block():
-        """ Stores the current block in the graph and starts a new one. """
-        if len(current_block) > 0 or len(current_jumps) > 0:
-            current_index = len(vertices)
-            vertices.append(current_block.copy())
-            edges.append(current_jumps.copy())
+            elif instruction.opname == 'SETUP_LOOP':
+                self.blocks.append(LoopBlock(self, instruction))
+                ignore_until = instruction.argval
+                force_new = True
 
-            for instruction in current_block:
-                block_mapping[instruction.offset] = current_index
+            elif instruction.opname in JUMP_OPNAMES:
+                self.blocks.append(JumpBlock(self, instruction))
+                force_new = True
 
-            current_block.clear()
-            current_jumps.clear()
+            elif instruction.opname in BRANCH_OPNAMES:
+                self.blocks.append(BranchBlock(self, instruction))
+                force_new = True
 
-    # We do a first pass of all the instructions to separate them into blocks
-    # and to add edges to the graph when needed.
-    for instruction in dis.get_instructions(code):
-        if (instruction.offset > 0 and instruction.is_jump_target) or \
-           instruction.opname in ALWAYS_JUMP_OPNAMES or \
-           instruction.opname in COND_JUMP_OPNAMES:
-            # If the previous instruction was not a jump instruction, then
-            # this instruction will come right after it, so we must add an
-            # edge from the previous block to this one.
-            if previous_instruction.opname not in ALWAYS_JUMP_OPNAMES and\
-               previous_instruction.opname not in COND_JUMP_OPNAMES:
-                current_jumps.append((len(vertices) + 1, None, MOD_NEXT_LINE))
-
-            new_block()
-
-        if instruction.opname in ALWAYS_JUMP_OPNAMES:
-            # We use (-1) as a placeholder for the edge's target block, which
-            # we will compute in a second pass - because we might jump to a
-            # line which has not yet been processed, and so we wouldn't know
-            # which block belongs to.
-            current_block.append(instruction)
-            current_jumps.append((-1, instruction, MOD_ALWAYS_JUMP))
-
-            new_block()
-
-        elif instruction.opname in COND_JUMP_OPNAMES:
-            # The value at the end of the tuple is 2 if the edge corresponds
-            # to when the condition for the jump was fulfilled, and 3 when it
-            # wasn't.
-            current_block.append(instruction)
-            current_jumps.append((-1, instruction, MOD_DID_JUMP))
-            current_jumps.append((-1, instruction, MOD_DID_NOT_JUMP))
-
-            new_block()
-
-        else:
-            current_block.append(instruction)
-
-        if previous_offset >= 0:
-            next_mapping[previous_offset] = instruction.offset
-
-        previous_offset = instruction.offset
-        previous_instruction = instruction
-
-    new_block()
-
-    # We do a second pass on the edges alone to resolve their jump targets to
-    # block indexes.
-    for jumps in edges:
-        for i in range(len(jumps)):
-            (_, instruction, modifier) = jumps[i]
-
-            if modifier == MOD_NEXT_LINE:
-                # We have already resolved the jump target in the first pass.
-                continue
-            elif modifier == MOD_DID_NOT_JUMP:
-                # We are jumping to the next instruction.
-                index = block_mapping[next_mapping[instruction.offset]]
             else:
-                # We use instruction.argval because it always contains the
-                # absolute offset of the jump target, even when
-                # instruction.arg contains a relative offset.
-                print(instruction)
-                index = block_mapping[instruction.argval]
+                if instruction.is_jump_target or force_new:
+                    force_new = False
+                    self.blocks.append(LinearBlock(self))
 
-            jumps[i] = (index, instruction, modifier)
+                self.current_block.add(instruction)
 
-    # We also do a second pass on the blocks to "clean them up", i.e. to
-    # remove the instructions and jumps which will never be reached.
-    for i, block in enumerate(vertices):
-        for j, instruction in enumerate(block):
-            if instruction.opname == 'RETURN_VALUE':
-                vertices[i] = block[:j + 1]
-                edges[i].clear()
-                break
+        # Once all the blocks have been created - which also means that all
+        # the instructions were assigned to one and only one block - we can
+        # "close" the blocks. For instance, this allows JumpBlocks and
+        # BranchBlocks to translate the offset of the instruction they
+        # should jump to into the block which contains that instruction.
+        for block in self.blocks:
+            block.close()
 
-    return (vertices, edges)
+    def sort_blocks(self):
+        pass
+
+    def execute_blocks(self):
+        pass
+
+    def express_blocks(self):
+        pass
+
+
+class Block():
+    def __init__(self, context):
+        self.context = context
+
+        # The index of this block in the graph that is being built.
+        self.index = len(context.blocks)
+
+        # The instructions which belong to this block.
+        self.instructions = []
+
+        # The block to which we should jump once we reach the end of this one.
+        self.next = None
+
+        # Whether the block has already reached a RETURN_VALUE instruction.
+        self.reached_return = False
+
+        # We add an edge between the previous block and this one.
+        if self.index > 0:
+            self.context.current_block.next = self
+
+    @property
+    def successors(self):
+        if self.next is not None:
+            return [(self.next, NORMAL_FLOW)]
+        else:
+            return []
+
+    def add(self, instruction):
+        if not self.reached_return:
+            self.instructions.append(instruction)
+
+        # Even though we only add the instruction to the block if it has not
+        # reached a RETURN_VALUE instruction before, we still have to declare
+        # that the block contains the instruction, otherwise we might break
+        # the translation from jump offsets to blocks that happens in
+        # JumpBlock@close and BranchBlock@close.
+        self.context.block_mapping[instruction.offset] = self
+
+        if instruction.opname == 'RETURN_VALUE':
+            self.reached_return = True
+
+    def close(self):
+        # If the block has reached a RETURN_VALUE instruction, we don't want
+        # to jump to any other block at the end of this one.
+        if self.reached_return:
+            self.next = None
+
+
+class LinearBlock(Block):
+    pass
+
+
+class JumpBlock(Block):
+    def __init__(self, context, instruction):
+        super().__init__(context)
+        self.instruction = instruction
+        self.add(instruction)
+
+    def close(self):
+        super().close()
+
+        # Because we will always take the jump, we can replace the edge which
+        # was created between this block and the one that follows it with a
+        # new edge between this block and the one it should jump to.
+        self.next = self.context.block_mapping[self.instruction.argval]
+
+
+class BranchBlock(Block):
+    def __init__(self, context, instruction):
+        super().__init__(context)
+        self.instruction = instruction
+        self.add(instruction)
+
+    @property
+    def successors(self):
+            return [(self.next, NORMAL_FLOW), (self.next_jumped, JUMP_FLOW)]
+
+    def close(self):
+        super().close()
+
+        # We keep self.next untouched - it will point to the block to go to if
+        # we don't take the jump, and we add self.next_jumped which will point
+        # to the block to go to if we take the jump.
+        self.next_jumped = self.context.block_mapping[self.instruction.argval]
+
+
+class LoopBlock(Block):
+    def __init__(self, context, instruction):
+        super().__init__(context)
+        self.instruction = instruction
+        self.add(instruction)
+
+
+class ExpressedBlock(Block):
+    pass
+
+
+def decompile(code):
+    decompiler = Decompiler()
+    decompiler.build_graph(dis.get_instructions(code))
+    decompiler.sort_blocks()
+    decompiler.execute_blocks()
+    decompiler.express_blocks()
+
+    return decompiler.first_block.expression
 
 
 def preview(code):
-    mods = ['NEXT_LINE', 'ALWAYS_JUMP', 'DID_JUMP', 'DID_NOT_JUMP']
+    TYPES = ['NORMAL_FLOW', 'JUMP_FLOW']
 
-    (vertices, edges) = cfg(code)
     graph = graphviz.Digraph()
 
-    for i, block in enumerate(vertices):
-        label = ', '.join(map(lambda instr: str(instr.offset), block))
-        graph.node(str(i), label)
+    decompiler = Decompiler()
+    decompiler.build_graph(dis.get_instructions(code))
 
-    for u in range(len(edges)):
-        for (v, instr, modifier) in edges[u]:
-            if instr is None:
-                label = ''
-            else:
-                label = str((instr.opname, mods[modifier]))
+    for block in decompiler.blocks:
+        name = block.__class__.__name__
 
-            graph.edge(str(u), str(v), label=label)
+        if isinstance(block, (JumpBlock, BranchBlock)):
+            label = name + '(' + block.instruction.opname + ')'
+        else:
+            offsets = ', '.join(
+                map(lambda instr: str(instr.offset), block.instructions))
+            label = name + '(' + offsets + ')'
+
+        graph.node(str(block.index), label)
+
+        for (next, type) in block.successors:
+            graph.edge(str(block.index), str(next.index), label=TYPES[type])
 
     graph.render('test/cfg.gv', view=True)
 
@@ -174,16 +235,10 @@ def foo(x):
         z = False
     return z
 
-
-def bar(z):
-    n = z - 1
-    while n > 0:
-        print('test')
-        if n == 10:
-            break
-        n -= 1
-
-    return 'foo'
+def bar(x):
+    for z in range(x, 0, -1):
+        print(z)
+    return None
 
 def baz(z):
     if foo:
@@ -193,6 +248,18 @@ def baz(z):
 
     return 'bla'
 
+def buz(x, y):
+    if x or y:
+        z = 1
+    else:
+        z = 2
+    return z
 
-preview(foo)
-dis.dis(foo)
+def bol(x, y, z):
+    z = z + 1
+    u = x < y == z
+    return u
+
+
+preview(baz)
+dis.dis(baz)
