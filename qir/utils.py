@@ -1,5 +1,6 @@
 from . import *
 
+import collections
 import google.protobuf
 import qir_pb2
 
@@ -59,7 +60,36 @@ def unserialize(message):
 
 
 def encode(value):
-    raise errors.NotYetImplementedError
+    if value is None:
+        return Null
+    elif isinstance(value, bool):
+        return Boolean(value)
+    elif isinstance(value, int):
+        return Number(value)
+    elif isinstance(value, float):
+        return Double(value)
+    elif isinstance(value, str):
+        return String(value)
+    elif isinstance(value, dict):
+        return encode_dict(value)
+    elif isinstance(value, collections.Iterable):
+        return encode_list(list(value))
+
+    raise TypeError
+
+
+def encode_dict(source):
+    inner = TupleNil()
+    for key in source:
+        inner = TupleCons(String(key), encode(source[key]), inner)
+    return inner
+
+
+def encode_list(source):
+    inner = ListNil()
+    for value in source:
+        inner = ListCons(encode(value), inner)
+    return inner
 
 
 def decode(expression):

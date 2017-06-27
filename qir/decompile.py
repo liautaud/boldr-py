@@ -124,7 +124,7 @@ class Decompiler():
             if not marked[block.index]:
                 visit(block)
 
-        self.ordering = reversed(ordering)
+        self.ordering = list(reversed(ordering))
 
     def execute_blocks(self):
         """
@@ -138,7 +138,7 @@ class Decompiler():
         Turn each block into a QIR expression in reversed topological ordering.
         """
         for index in reversed(self.ordering):
-            self.blocks[index] = ExpressedBlock(self.blocks[index].express())
+            self.blocks[index].express()
 
 
 class Block():
@@ -176,9 +176,9 @@ class Block():
         if not self.reached_return:
             self.instructions.append(instruction)
 
-        # Even though we only add the instruction to the block if it has not
-        # reached a RETURN_VALUE instruction before, we still have to declare
-        # that the block contains the instruction, otherwise we might break
+        # Even though we only add the new instruction to the block if we have
+        # not yet reached a RETURN_VALUE instruction, we still have to declare
+        # that the block contains the new instruction, otherwise we might break
         # the translation from jump offsets to blocks that happens in
         # JumpBlock@close and BranchBlock@close.
         self.context.block_mapping[instruction.offset] = self
@@ -187,8 +187,8 @@ class Block():
             self.reached_return = True
 
     def close(self):
-        # If the block has reached a RETURN_VALUE instruction, we don't want
-        # to jump to any other block at the end of this one.
+        # If the block contains a RETURN_VALUE instruction, we don't want to
+        # jump to any other block at the end of this one.
         if self.reached_return:
             self.next = None
 
@@ -259,7 +259,8 @@ class LinearBlock(Block):
             elif name == 'ROT_TWO':
                 stack[-1], stack[-2] = stack[-2], stack[-1]
             elif name == 'ROT_THREE':
-                stack[-1], stack[-2], stack[-2] = stack[-3], stack[-1]
+                stack[-1], stack[-2], stack[-3] =\
+                    stack[-2], stack[-3], stack[-1]
             elif name == 'DUP_TOP':
                 stack.append(stack[-1])
             elif name == 'DUP_TOP_TWO':
@@ -279,7 +280,8 @@ class LinearBlock(Block):
                   instruction.argval in COMPARE_OPERATIONS):
                 right = stack.pop()
                 left = stack.pop()
-                stack.append(COMPARE_OPERATIONS[name](left, right))
+                stack.append(
+                    COMPARE_OPERATIONS[instruction.argval](left, right))
             elif name == 'BINARY_SUBSCR':
                 key = stack.pop()
                 container = stack.pop()
@@ -366,10 +368,10 @@ class LinearBlock(Block):
             inner = self.next.expression
 
         # Wrap the expression inside all the variable bindings.
-        for (name, value) in reversed(bindings):
-            inner = Application(Lambda(Identifier(name), wrapped), value)
+        for (name, value) in reversed(self.bindings):
+            inner = Application(Lambda(Identifier(name), inner), value)
 
-        return inner
+        self.expression = inner
 
 class JumpBlock(Block):
     def __init__(self, context, instruction):
@@ -386,7 +388,7 @@ class JumpBlock(Block):
         self.next = self.context.block_mapping[self.instruction.argval]
 
     def express(self):
-        return self.next.expression
+        self.expression = self.next.expression
 
 
 class BranchBlock(Block):
@@ -411,7 +413,7 @@ class BranchBlock(Block):
         condition = self.stack[-1]
 
         if self.instruction.opname in \
-                ['POP_JUMP_IF_FALSE', 'JUMP_IF_TRUE_OR_POP']:
+                ['POP_JUMP_IF_FALSE', 'JUMP_IF_FALSE_OR_POP']:
             on_true = self.next.expression
             on_false = self.next_jumped.expression
 
@@ -420,7 +422,7 @@ class BranchBlock(Block):
             on_true = self.next_jumped.expression
             on_false = self.next.expression
 
-        return Conditional(condition, on_true, on_false)
+        self.expression = Conditional(condition, on_true, on_false)
 
 
 class LoopBlock(Block):
@@ -428,11 +430,6 @@ class LoopBlock(Block):
         super().__init__(context)
         self.instruction = instruction
         self.add(instruction)
-
-
-class ExpressedBlock(Block):
-    def __init__(self, expression):
-        self.expression = expression
 
 
 def decompile(code):
@@ -452,8 +449,8 @@ def preview(code):
 
     decompiler = Decompiler()
     decompiler.build_graph(dis.get_instructions(code))
-    decompiler.sort_blocks()
-    decompiler.execute_blocks()
+
+    dis.dis(code)
 
     for block in decompiler.blocks:
         name = block.__class__.__name__
@@ -506,7 +503,3 @@ def bol(x, y, z):
     z = z + 1
     u = x < y == z
     return u
-
-
-preview(bol)
-dis.dis(bol)

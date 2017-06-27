@@ -33,7 +33,7 @@ class Number(Value):
 
 class Double(Value):
     """ A QIR expression representing a floating point value. """
-    fields = (('value', int),)
+    fields = (('value', float),)
 
 
 class String(Value):
