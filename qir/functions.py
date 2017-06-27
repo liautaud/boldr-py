@@ -24,6 +24,11 @@ class Lambda(base.Expression):
         return self
 
 
+class Fixed(base.Expression):
+    """ A shortcut for the Y fixed-point combinator. """
+    fields = ()
+
+
 class Application(base.Expression):
     """ A QIR expression representing a function application. """
     fields = (

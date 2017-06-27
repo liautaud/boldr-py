@@ -33,11 +33,15 @@ class Expression:
             raise NotImplementedError
 
         if len(args) != len(self.fields):
-            raise TypeError
+            raise TypeError(
+                'Expected %d arguments for %s, got %d' %
+                (len(self.fields), self.__name__, len(args)))
 
         for field, argument in zip(self.fields, args):
             if not isinstance(argument, field[1]):
-                raise TypeError
+                raise TypeError(
+                    'Expected argument `%s` to be an instance of %s, got %s' %
+                    (field[0], field[1], argument))
 
             setattr(self, field[0], argument)
 

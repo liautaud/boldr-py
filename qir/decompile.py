@@ -22,7 +22,8 @@ BRANCH_MAY_POP_OPNAMES = [
 
 BRANCH_OPNAMES = \
     BRANCH_POP_OPNAMES + \
-    BRANCH_MAY_POP_OPNAMES
+    BRANCH_MAY_POP_OPNAMES + \
+    ['FOR_ITER']
 
 
 class PredecessorStacksError(Exception):
@@ -254,15 +255,20 @@ class LinearBlock(Block):
             # General instructions
             if name == 'NOP':
                 pass
+
             elif name == 'POP_TOP':
                 stack.pop()
+
             elif name == 'ROT_TWO':
                 stack[-1], stack[-2] = stack[-2], stack[-1]
+
             elif name == 'ROT_THREE':
                 stack[-1], stack[-2], stack[-3] =\
                     stack[-2], stack[-3], stack[-1]
+
             elif name == 'DUP_TOP':
                 stack.append(stack[-1])
+
             elif name == 'DUP_TOP_TWO':
                 stack.append(stack[-2])
                 stack.append(stack[-2])
@@ -272,51 +278,66 @@ class LinearBlock(Block):
                 right = stack.pop()
                 left = stack.pop()
                 stack.append(BINARY_OPERATIONS[name](left, right))
+
             elif name in INPLACE_OPERATIONS:
                 right = stack.pop()
                 left = stack.pop()
                 stack.append(INPLACE_OPERATIONS[name](left, right))
+
             elif (name == 'COMPARE_OP' and
                   instruction.argval in COMPARE_OPERATIONS):
                 right = stack.pop()
                 left = stack.pop()
                 stack.append(
                     COMPARE_OPERATIONS[instruction.argval](left, right))
+
             elif name == 'BINARY_SUBSCR':
                 key = stack.pop()
                 container = stack.pop()
                 stack.append(TupleDestr(container, key))
+
             elif name == 'STORE_SUBSCR':
                 key = stack.pop()
                 container = stack.pop()
                 value = stack.pop()
                 stack.append(TupleCons(key, value, container))
+
             elif name == 'DELETE_SUBSCR':
                 container = stack.pop()
                 value = stack.pop()
-                stack.append(TupleCons(key, Null, container))
+                stack.append(TupleCons(key, Null(), container))
 
             # Miscellaneous opcodes
             elif name == 'RETURN_VALUE':
                 self.returns = True
+
+            elif name == 'POP_BLOCK':
+                pass
+
             elif name == 'LOAD_CONST':
                 stack.append(encode(instruction.argval))
+
             elif (name == 'LOAD_NAME' or
                   name == 'LOAD_GLOBAL' or
                   name == 'LOAD_FAST'):
                 stack.append(Identifier(instruction.argval))
+
             elif name == 'LOAD_ATTR':
                 container = stack.pop()
                 stack.append(TupleDestr(container, String(instruction.argval)))
+
             elif (name == 'STORE_NAME' or
                   name == 'STORE_FAST'):
                 value = stack.pop()
                 bindings.append((instruction.argval, value))
+
             elif name == 'STORE_GLOBAL':
                 raise NotImplementedError
+
             elif (name == 'DELETE_NAME' or
                   name == 'DELETE_FAST'):
-                bindings.append((instruction.argval, Null))
+                bindings.append((instruction.argval, Null()))
+
             elif name == 'DELETE_GLOBAL':
                 raise NotImplementedError
 
@@ -354,7 +375,7 @@ class LinearBlock(Block):
 
             # Other opcodes
             else:
-                raise NotImplementedError
+                raise NotImplementedError(name)
 
         self.stack = stack
         self.bindings = bindings
@@ -363,7 +384,7 @@ class LinearBlock(Block):
         if self.next is None and self.reached_return:
             inner = self.stack[-1]
         elif self.next is None:
-            inner = Null
+            inner = Null()
         else:
             inner = self.next.expression
 
@@ -372,6 +393,7 @@ class LinearBlock(Block):
             inner = Application(Lambda(Identifier(name), inner), value)
 
         self.expression = inner
+
 
 class JumpBlock(Block):
     def __init__(self, context, instruction):
@@ -431,6 +453,131 @@ class LoopBlock(Block):
         self.instruction = instruction
         self.add(instruction)
 
+    def execute(self):
+        super().execute()
+
+        # We use a separate instance of the decompiler to process the code
+        # inside the loop. We have to add a placeholder for the instruction
+        # following the end of the loop.
+        instructions = self.instructions[1:] + \
+            [dis.Instruction('AFTER_LOOP', -1, None, None,
+             None, self.instruction.argval, None, True)]
+
+        # For some reason, loop breaks are translated into BREAK_LOOP
+        # instructions rather than standard jumps, so we must fix that
+        # manually.
+        to_delete = []
+
+        for i in range(len(instructions)):
+            instr = instructions[i]
+
+            if instr.opname == 'BREAK_LOOP':
+                instructions[i] = dis.Instruction(
+                    'JUMP_ABSOLUTE', 113, self.instruction.argval,
+                    self.instruction.argval, None, instr.offset,
+                    instr.starts_line, instr.is_jump_target)
+
+                # TODO: Remove this, and instead properly prune the graph to
+                # remove all non-accessible blocks (starting from 0).
+                if (instructions[i + 1].opname in JUMP_OPNAMES and
+                    not instructions[i + 1].is_jump_target):
+                    to_delete.append(i + 1)
+
+        for i in to_delete:
+            del instructions[i]
+
+        decompiler = Decompiler()
+        decompiler.build_graph(instructions)
+
+        # We start by identifying the block which starts the body of the loop,
+        # which might not be the first block of the graph (in for loops, for
+        # instance, the first instructions are used to build the iterator and
+        # push it onto the stack.)
+        start_block = decompiler.first_block
+
+        while all([p.index < start_block.index
+                   for (p, _) in start_block.predecessors]):
+            start_block = start_block.next
+
+        last_block = decompiler.current_block
+
+        # We then identify the edges which jump back to the start_block, and
+        # make them point to a placeholder block instead. This block, once
+        # expressed, will turn into a call to on_loop.
+        loop_placeholder = PlaceholderBlock(
+            decompiler,
+            Application(Identifier('on_loop'), Null()))
+
+        decompiler.blocks.append(loop_placeholder)
+
+        start_block_final_predecessors = []
+
+        for (predecessor, edge_type) in start_block.predecessors:
+            if predecessor.index < start_block.index:
+                start_block_final_predecessors.append((predecessor, edge_type))
+            elif edge_type == JUMP_FLOW:
+                predecessor.next_jumped = loop_placeholder
+            else:
+                predecessor.next = loop_placeholder
+
+        start_block.predecessors = start_block_final_predecessors
+
+        # We finally replace all the references to the last block, which only
+        # contains the AFTER_LOOP instruction that we added earlier, with a
+        # placeholder block which will turn into a call to on_after.
+        after_placeholder = PlaceholderBlock(
+            decompiler,
+            Application(Identifier('on_after'), Null()))
+
+        after_placeholder.index = last_block.index
+        decompiler.blocks[last_block.index] = after_placeholder
+
+        for (predecessor, edge_type) in last_block.predecessors:
+            if edge_type == JUMP_FLOW:
+                predecessor.next_jumped = after_placeholder
+            else:
+                predecessor.next = after_placeholder
+
+        # We have to remove the edge that is automatically created between a
+        # block and the one which follows it.
+        loop_placeholder.next = None
+        after_placeholder.next = None
+
+        # Everything is now ready!
+        decompiler.sort_blocks()
+        decompiler.execute_blocks()
+        decompiler.express_blocks()
+
+        self.body_expression = decompiler.first_block.expression
+
+    def express(self):
+        on_loop = self.body_expression
+        on_after = self.next.expression
+
+        # Using the Y fixed-point combinator, we return a recursive function
+        # which can either call itself again (to run the loop once more) or
+        # call the rest of the code.
+        self.expression = Application(
+            Lambda(
+                Identifier('on_after'),
+                Application(
+                    Fixed(),
+                    Lambda(
+                        Identifier('on_loop'),
+                        Lambda(Identifier('_'), on_loop)))),
+            Lambda(
+                Identifier('_'),
+                on_after))
+
+
+class PlaceholderBlock(Block):
+    def __init__(self, context, expression):
+        super().__init__(context)
+        self.expression = expression
+
+    def express(self):
+        pass
+
 
 def decompile(code):
     decompiler = Decompiler()
@@ -483,6 +630,16 @@ def bar(x):
     for z in range(x, 0, -1):
         print(z)
     return None
+
+def bor(x):
+    y = 0
+    while x + y < 12:
+        if x % 2 == 9:
+            break
+        elif x % 2 == 8:
+            continue
+        y -= 6
+    return 6
 
 def baz(z):
     if foo:

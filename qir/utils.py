@@ -61,7 +61,7 @@ def unserialize(message):
 
 def encode(value):
     if value is None:
-        return Null
+        return Null()
     elif isinstance(value, bool):
         return Boolean(value)
     elif isinstance(value, int):
