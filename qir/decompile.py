@@ -1,6 +1,7 @@
 from . import *
 
 import dis
+import types
 import graphviz
 
 
@@ -341,6 +342,20 @@ class LinearBlock(Block):
             elif name == 'DELETE_GLOBAL':
                 raise NotImplementedError
 
+            elif name == 'CALL_FUNCTION':
+                count = instruction.argval
+                inner = stack[-(count + 1)]
+
+                # Because the QIR functions are currified, we have to make as
+                # many applications as there are arguments. The good news is,
+                # as the right-most argument is on top of the stack, this is
+                # all pretty straightforward.
+                for i in range(count):
+                    inner = Application(inner, stack.pop())
+
+                stack.pop()
+                stack.append(inner)
+
             elif (name == 'BUILD_TUPLE' or
                   name == 'BUILD_LIST' or
                   name == 'BUILD_SET'):
@@ -372,6 +387,22 @@ class LinearBlock(Block):
 
                 string = ''.join(map(lambda x: x.value, values))
                 stack.append(String(string))
+
+            elif name == 'MAKE_FUNCTION':
+                if instruction.argval > 0:
+                    raise errors.NotYetImplementedError
+
+                stack.pop()
+                code = stack.pop()
+
+                if not isinstance(code, types.CodeType):
+                    raise TypeError
+
+                stack.append(decompile(code))
+
+            elif name == 'GET_ITER':
+                # TODO: Check if this is really the right thing to do.
+                pass
 
             # Other opcodes
             else:
@@ -579,7 +610,7 @@ class PlaceholderBlock(Block):
         pass
 
 
-def decompile(code):
+def decompile_code(code):
     decompiler = Decompiler()
     decompiler.build_graph(dis.get_instructions(code))
     decompiler.sort_blocks()
@@ -587,6 +618,28 @@ def decompile(code):
     decompiler.express_blocks()
 
     return decompiler.first_block.expression
+
+
+def decompile_comprehension(code):
+    pass
+
+
+def decompile(code):
+    # We treat the case of comprehensions and generator expressions a bit
+    # differently, as we want to turn them into Project() operations directly.
+    if code.co_name in ['<listcomp>', '<setcomp>', '<dictcomp>', '<genexpr>']:
+        inner = decompile_comprehension(code)
+    else:
+        inner = decompile_code(code)
+
+    # Wrap the inner expression around a Lambda function with the right
+    # argument names. This works because, apparently, the names of the
+    # arguments always come before the names of the local variables in
+    # code.co_varnames.
+    for name in reversed(code.co_varnames[:code.co_argcount]):
+        inner = Lambda(Identifier(name), inner)
+
+    return inner
 
 
 def preview(code):
@@ -618,7 +671,7 @@ def preview(code):
     graph.render('test/cfg.gv', view=True)
 
 
-def foo(x):
+def foo(x, z):
     y = x + 2
     if y % 2 == 0:
         z = True
@@ -658,5 +711,5 @@ def buz(x, y):
 
 def bol(x, y, z):
     z = z + 1
-    u = x < y == z
+    u = x < y < z
     return u
