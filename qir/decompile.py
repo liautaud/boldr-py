@@ -2,8 +2,10 @@ from . import *
 
 import dis
 import types
+import random
 import graphviz
 
+from functools import reduce
 
 NORMAL_FLOW = 0
 JUMP_FLOW = 1
@@ -34,11 +36,16 @@ class PredecessorStacksError(Exception):
 class Decompiler():
     def __init__(self):
         self.blocks = []
-        self.edges = []
 
         # In order to be able to compute the graph in linear time, we keep a
         # mapping of the block in which any instruction is contained.
         self.block_mapping = {}
+
+        # Whether to use comprehension mode, which is designed to handle the
+        # decompilation of list, set and map comprehensions. In this mode, a
+        # FOR_ITER instruction will be turned into a ComprehensionLoopBlock
+        # instead of a ForLoopBlock.
+        self.comprehension_mode = False
 
     @property
     def first_block(self):
@@ -52,9 +59,15 @@ class Decompiler():
     def current_block(self):
         return self.blocks[-1]
 
-    def build_graph(self, instructions):
+    def build_graph(self, instructions, ignore_loop=False):
         """
         Separate the instructions into blocks and build a control flow graph.
+
+        instructions: The list of instructions to process.
+        ignore_loop: Whether to ignore a SETUP_LOOP or a FOR_ITER instruction
+        if it is the first instruction of the list. This is useful to avoid
+        infinite recursion when using a separate Decompiler instance to
+        process the inside of a LoopBlock.
         """
 
         # The offset before which all instructions should be added to the
@@ -65,12 +78,31 @@ class Decompiler():
         # is not a jump target.
         force_new = True
 
-        for instruction in instructions:
+        for i, instruction in enumerate(instructions):
             if instruction.offset < ignore_until:
                 self.current_block.add(instruction)
 
-            elif instruction.opname == 'SETUP_LOOP':
-                self.blocks.append(LoopBlock(self, instruction))
+            elif (instruction.opname == 'FOR_ITER' and
+                  (not ignore_loop or i > 0)):
+                if self.comprehension_mode:
+                    block_type = ComprehensionLoopBlock
+                else:
+                    block_type = ForLoopBlock
+
+                self.blocks.append(block_type(self, instruction))
+                ignore_until = instruction.argval
+                force_new = True
+
+            # We must determine whether the SETUP_LOOP instruction introduces
+            # a for or a while loop in O(1), so what we can do is check
+            # whether the next instruction is a jump target, in which case
+            # either that instruction is FOR_ITER, and the loop is a for loop,
+            # or the loop is a while loop.
+            elif (instruction.opname == 'SETUP_LOOP' and
+                  instructions[i + 1].opname != 'FOR_ITER' and
+                  instructions[i + 1].is_jump_target and
+                  (not ignore_loop or i > 0)):
+                self.blocks.append(WhileLoopBlock(self, instruction))
                 ignore_until = instruction.argval
                 force_new = True
 
@@ -122,18 +154,25 @@ class Decompiler():
 
             ordering.append(block.index)
 
-        for block in self.blocks:
-            if not marked[block.index]:
-                visit(block)
-
+        visit(self.first_block)
         self.ordering = list(reversed(ordering))
 
-    def execute_blocks(self):
+    def detach_unreachable(self):
+        """
+        Detaches all the blocks which are not reachable from the first block.
+        As the topological ordering that was computed earlier in sort_blocks
+        only explores the first block's connected component, we can easily
+        deduce which blocks should be removed.
+        """
+        for i in set(range(len(self.blocks))) - set(self.ordering):
+            self.blocks[i].detach()
+
+    def execute_blocks(self, starting_stack=[], starting_env={}):
         """
         Partially execute each block in topological ordering.
         """
         for index in self.ordering:
-            self.blocks[index].execute()
+            self.blocks[index].execute(starting_stack, starting_env)
 
     def express_blocks(self):
         """
@@ -160,8 +199,14 @@ class Block():
         # This reverse map will be filled automatically by build_graph.
         self.predecessors = []
 
-        # Whether the block has already reached a RETURN_VALUE instruction.
-        self.reached_return = False
+        # Whether the block contains a RETURN_VALUE instruction.
+        self.contains_return = False
+
+        # Whether the block contains a LIST_APPEND instruction.
+        self.contains_append = False
+
+        # The expression that the block returns, if any.
+        self.returns = None
 
         # We add an edge between the previous block and this one.
         if self.index > 0:
@@ -175,7 +220,7 @@ class Block():
             return []
 
     def add(self, instruction):
-        if not self.reached_return:
+        if not self.contains_return:
             self.instructions.append(instruction)
 
         # Even though we only add the new instruction to the block if we have
@@ -186,18 +231,42 @@ class Block():
         self.context.block_mapping[instruction.offset] = self
 
         if instruction.opname == 'RETURN_VALUE':
-            self.reached_return = True
+            self.contains_return = True
+
+        if instruction.opname in ['LIST_APPEND', 'SET_ADD', 'MAP_ADD']:
+            self.contains_append = True
 
     def close(self):
         # If the block contains a RETURN_VALUE instruction, we don't want to
         # jump to any other block at the end of this one.
-        if self.reached_return:
+        if self.contains_return:
             self.next = None
 
-    def execute(self):
+    def detach(self):
+        """
+        Detach the block from its neighbours and remove it from the graph.
+        """
+        for (successor, edge_type) in self.successors:
+            successor.predecessors.remove((self, edge_type))
+
+        for (predecessor, edge_type) in self.predecessors:
+            if edge_type == NORMAL_FLOW:
+                predecessor.next = None
+            else:
+                predecessor.next_jumped = None
+
+        self.predecessors = []
+        self.next = None
+        self.next_jumped = None
+
+    def execute(self, starting_stack=[], starting_env={}):
         """
         Ensure that all the block's direct predecessors share the same final
         stack state, and if so make it the initial state of the block's stack.
+
+        The starting_stack is the stack which will be used if the block has no
+        predecessors. This is used when dealing with loops, for instance, as
+        LoopBlock execute the loop instructions inside a separate builder.
         """
         stacks = []
 
@@ -207,15 +276,20 @@ class Block():
             # popped right before the jump depending on the precise branching
             # instruction and the type of edge that links this block to the
             # predecessor.
-            if (isinstance(predecessor, BranchBlock) and
-                (predecessor.instruction.opname in BRANCH_POP_OPNAMES or
-                 edge_type == NORMAL_FLOW)):
-                stacks.append(predecessor.stack[:-1])
+            if isinstance(predecessor, BranchBlock):
+                name = predecessor.instruction.opname
+                if ((name == 'FOR_ITER' and
+                        edge_type == NORMAL_FLOW) or
+                    (name in BRANCH_MAY_POP_OPNAMES and
+                        edge_type == JUMP_FLOW)):
+                    stacks.append(predecessor.stack[:])
+                else:
+                    stacks.append(predecessor.stack[:-1])
             else:
                 stacks.append(predecessor.stack[:])
 
         if len(stacks) < 1:
-            self.stack = []
+            self.stack = starting_stack
         elif any(stacks[0] != stack for stack in stacks[1:]):
             raise PredecessorStacksError
         else:
@@ -244,8 +318,8 @@ COMPARE_OPERATIONS = {
     '<': LowerThan}
 
 class LinearBlock(Block):
-    def execute(self):
-        super().execute()
+    def execute(self, starting_stack=[], starting_env={}):
+        super().execute(starting_stack, starting_env)
 
         stack = self.stack
         bindings = []
@@ -309,8 +383,19 @@ class LinearBlock(Block):
                 stack.append(TupleCons(key, Null(), container))
 
             # Miscellaneous opcodes
-            elif name == 'RETURN_VALUE':
-                self.returns = True
+            elif name in ['RETURN_VALUE', 'YIELD_VALUE']:
+                self.returns = stack.pop()
+
+            elif name in ['LIST_APPEND', 'SET_ADD']:
+                value = stack.pop()
+                tail = stack[-1 * instruction.argval]
+                stack[-1 * instruction.argval] = ListCons(value, tail)
+
+            elif name == 'MAP_ADD':
+                key = stack.pop()
+                value = stack.pop()
+                tail = stack[-1 * instruction.argval]
+                stack[-1 * instruction.argval] = TupleCons(key, value, tail)
 
             elif name == 'POP_BLOCK':
                 pass
@@ -393,12 +478,9 @@ class LinearBlock(Block):
                     raise errors.NotYetImplementedError
 
                 stack.pop()
-                code = stack.pop()
 
-                if not isinstance(code, types.CodeType):
-                    raise TypeError
-
-                stack.append(decompile(code))
+            elif name == 'SETUP_LOOP':
+                pass
 
             elif name == 'GET_ITER':
                 # TODO: Check if this is really the right thing to do.
@@ -412,8 +494,8 @@ class LinearBlock(Block):
         self.bindings = bindings
 
     def express(self):
-        if self.next is None and self.reached_return:
-            inner = self.stack[-1]
+        if self.returns is not None:
+            inner = self.returns
         elif self.next is None:
             inner = Null()
         else:
@@ -462,7 +544,22 @@ class BranchBlock(Block):
         # to the block to go to if we take the jump.
         self.next_jumped = self.context.block_mapping[self.instruction.argval]
 
+    def execute(self, starting_stack=[], starting_env={}):
+        super().execute(starting_stack, starting_env)
+
+        # If the block's instruction is FOR_ITER, we have to push a reference
+        # to the current value of the iterator on the stack, so that blocks
+        # inside the loop's body can use it. We use the instruction's offset
+        # as a way to avoid name clashes in nested loops.
+        if self.instruction.opname == 'FOR_ITER':
+            identifier = 'cv_' + str(self.instruction.offset)
+            self.stack.append(Identifier(identifier))
+
     def express(self):
+        if self.instruction.opname == 'FOR_ITER':
+            self.expression = self.next.expression
+            return
+
         condition = self.stack[-1]
 
         if self.instruction.opname in \
@@ -484,21 +581,18 @@ class LoopBlock(Block):
         self.instruction = instruction
         self.add(instruction)
 
-    def execute(self):
-        super().execute()
+    def execute(self, starting_stack=[], starting_env={}):
+        super().execute(starting_stack, starting_env)
 
         # We use a separate instance of the decompiler to process the code
         # inside the loop. We have to add a placeholder for the instruction
         # following the end of the loop.
-        instructions = self.instructions[1:] + \
+        instructions = self.instructions + \
             [dis.Instruction('AFTER_LOOP', -1, None, None,
              None, self.instruction.argval, None, True)]
 
-        # For some reason, loop breaks are translated into BREAK_LOOP
-        # instructions rather than standard jumps, so we must fix that
-        # manually.
-        to_delete = []
-
+        # For some reason, breaks are translated into BREAK_LOOP instructions
+        # instead of the standard JUMP_ABSOLUTE, so we must fix that manually.
         for i in range(len(instructions)):
             instr = instructions[i]
 
@@ -508,57 +602,44 @@ class LoopBlock(Block):
                     self.instruction.argval, None, instr.offset,
                     instr.starts_line, instr.is_jump_target)
 
-                # TODO: Remove this, and instead properly prune the graph to
-                # remove all non-accessible blocks (starting from 0).
-                if (instructions[i + 1].opname in JUMP_OPNAMES and
-                    not instructions[i + 1].is_jump_target):
-                    to_delete.append(i + 1)
-
-        for i in to_delete:
-            del instructions[i]
-
         decompiler = Decompiler()
-        decompiler.build_graph(instructions)
+        decompiler.comprehension_mode = self.context.comprehension_mode
+        decompiler.build_graph(instructions, True)
 
-        # We start by identifying the block which starts the body of the loop,
-        # which might not be the first block of the graph (in for loops, for
-        # instance, the first instructions are used to build the iterator and
-        # push it onto the stack.)
         start_block = decompiler.first_block
-
-        while all([p.index < start_block.index
-                   for (p, _) in start_block.predecessors]):
-            start_block = start_block.next
-
         last_block = decompiler.current_block
+
+        decompiler.sort_blocks()
+        decompiler.detach_unreachable()
 
         # We then identify the edges which jump back to the start_block, and
         # make them point to a placeholder block instead. This block, once
         # expressed, will turn into a call to on_loop.
         loop_placeholder = PlaceholderBlock(
-            decompiler,
-            Application(Identifier('on_loop'), Null()))
+            decompiler, Application(Identifier('on_loop'), Null()))
 
         decompiler.blocks.append(loop_placeholder)
 
-        start_block_final_predecessors = []
+        previous_predecessors = start_block.predecessors
+        start_block.predecessors = []
 
-        for (predecessor, edge_type) in start_block.predecessors:
+        for (predecessor, edge_type) in previous_predecessors:
             if predecessor.index < start_block.index:
-                start_block_final_predecessors.append((predecessor, edge_type))
+                start_block.predecessors.append((predecessor, edge_type))
             elif edge_type == JUMP_FLOW:
                 predecessor.next_jumped = loop_placeholder
+                loop_placeholder.predecessors.append(
+                    (predecessor, JUMP_FLOW))
             else:
                 predecessor.next = loop_placeholder
+                loop_placeholder.predecessors.append(
+                    (predecessor, NORMAL_FLOW))
 
-        start_block.predecessors = start_block_final_predecessors
-
-        # We finally replace all the references to the last block, which only
+        # We also replace all the references to the last block, which only
         # contains the AFTER_LOOP instruction that we added earlier, with a
         # placeholder block which will turn into a call to on_after.
         after_placeholder = PlaceholderBlock(
-            decompiler,
-            Application(Identifier('on_after'), Null()))
+            decompiler, Application(Identifier('on_after'), Null()))
 
         after_placeholder.index = last_block.index
         decompiler.blocks[last_block.index] = after_placeholder
@@ -566,23 +647,41 @@ class LoopBlock(Block):
         for (predecessor, edge_type) in last_block.predecessors:
             if edge_type == JUMP_FLOW:
                 predecessor.next_jumped = after_placeholder
+                after_placeholder.predecessors.append(
+                    (predecessor, JUMP_FLOW))
             else:
                 predecessor.next = after_placeholder
+                after_placeholder.predecessors.append(
+                    (predecessor, NORMAL_FLOW))
 
-        # We have to remove the edge that is automatically created between a
-        # block and the one which follows it.
+        # This is not pretty, but we must remove the edge that is created
+        # between a block and the one which follows it.
         loop_placeholder.next = None
         after_placeholder.next = None
 
-        # Everything is now ready!
-        decompiler.sort_blocks()
-        decompiler.execute_blocks()
-        decompiler.express_blocks()
+        display_graph(decompiler)
 
-        self.body_expression = decompiler.first_block.expression
+        self.loop_placeholder, self.after_placeholder, self.decompiler =\
+            loop_placeholder, after_placeholder, decompiler
+
+
+class WhileLoopBlock(LoopBlock):
+    def __init__(self, context, instruction):
+        super().__init__(context, instruction)
+
+        # We don't want SETUP_LOOP to appear in the instructions, as the first
+        # block of the loop's body should be the jump target.
+        if instruction.opname == 'SETUP_LOOP':
+            del self.instructions[0]
+
+    def execute(self, starting_stack=[], starting_env={}):
+        super().execute(starting_stack, starting_env)
+        self.decompiler.execute_blocks(self.stack[:])
 
     def express(self):
-        on_loop = self.body_expression
+        self.decompiler.express_blocks()
+
+        on_loop = self.decompiler.first_block.expression
         on_after = self.next.expression
 
         # Using the Y fixed-point combinator, we return a recursive function
@@ -601,36 +700,188 @@ class LoopBlock(Block):
                 on_after))
 
 
+class ForLoopBlock(LoopBlock):
+    def execute(self, starting_stack=[], starting_env={}):
+        super().execute(starting_stack, starting_env)
+        self.decompiler.execute_blocks(self.stack[:])
+
+        # We have to remove the iterator from the stack to reproduce what
+        # FOR_ITER does once it jumps out of the loop, but we must also store
+        # it somewhere in order to get it back in express().
+        self.iterator = self.stack.pop()
+
+    def express(self):
+        self.decompiler.express_blocks()
+
+        identifier = 'cv_' + str(self.instruction.offset)
+        on_loop = self.decompiler.first_block.expression
+        on_after = self.next.expression
+
+        # We have to use the Y fixed-point combinator together with calls to
+        # ListDestr. This isn't very pretty, but it's the only way that makes
+        # it possible to change variable bindings between iterations - which
+        # is not possible with Project().
+        self.expression = Application(
+            Lambda(
+                Identifier('on_after'),
+                Application(
+                    Lambda(
+                        Identifier('current_iterator'),
+                        Application(
+                            Fixed(),
+                            Lambda(
+                                Identifier('on_loop'),
+                                Lambda(
+                                    Identifier('_'),
+                                    ListDestr(
+                                        Identifier('current_iterator'),
+                                        Application(
+                                            Identifier('on_after'),
+                                            Null()
+                                        ),
+                                        Lambda(
+                                            Identifier(identifier),
+                                            Lambda(
+                                                Identifier('current_iterator'),
+                                                on_loop
+                                            ),
+                                        )
+                                    )
+                                )))),
+                    self.iterator)),
+            Lambda(
+                Identifier('_'),
+                on_after))
+
+
+class ComprehensionLoopBlock(LoopBlock):
+    def execute(self, starting_stack=[], starting_env={}):
+        super().execute(starting_stack, starting_env)
+
+        identifier = 'cv_' + str(self.instruction.offset)
+
+        # Even though the graph might contain multiple paths leading to the
+        # loop_placeholder block, only one of them contains the LIST_APPEND
+        # (or SET_ADD or MAP_ADD) instruction.
+        def find_append_path(start, already_found):
+            """
+            Find the path in the graph which contains the LIST_APPEND, SET_ADD
+            or MAP_ADD instruction.
+
+            start: The block from which to start the path.
+            already_found: Whether the instruction was already found earlier.
+            """
+            if start.index == 0:
+                return [start] if already_found else None
+
+            if start.contains_append:
+                already_found = True
+
+            for (predecessor, edge_type) in start.predecessors:
+                path = find_append_path(predecessor, already_found)
+
+                if path is not None:
+                    return path + [start]
+
+            return None
+
+        # We keep an environment with the current bindings of all variables so
+        # that we can try to substitute identifiers with their values in the
+        # terms we encounter along the path.
+        environment = starting_env
+
+        # We also build a conjunction of QIR expressions which must evaluate
+        # to True in order for the path to be taken.
+        append_when = []
+
+        path = find_append_path(self.loop_placeholder, False)
+
+        for i in range(len(path)):
+            block = path[i]
+            block.execute(self.stack[:], environment)
+
+            if isinstance(block, LinearBlock):
+                for (key, value) in block.bindings:
+                    environment[key] = value
+
+            elif (isinstance(block, BranchBlock) and
+                  block.instruction.opname != 'FOR_ITER'):
+                condition = substitute(block.stack[-1], environment)
+                is_normal_flow = (path[i + 1].index == block.next.index)
+
+                if ((is_normal_flow and block.instruction.opname in
+                     ['POP_JUMP_IF_TRUE', 'JUMP_IF_TRUE_OR_POP']) or
+                    (not is_normal_flow and block.instruction.opname in
+                     ['POP_JUMP_IF_FALSE', 'JUMP_IF_FALSE_OR_POP'])):
+                        condition = Not(condition)
+
+                append_when.append(condition)
+
+        # We have to remove the iterator from the stack to reproduce what
+        # FOR_ITER does once it jumps out of the loop, but we must also store
+        # it somewhere in order to use it later.
+        iterator = self.stack.pop()
+
+        # If the conjunction is not empty, we must filter the iterator to keep
+        # only the elements for which the path will be taken.
+        if len(append_when) > 0:
+            condition = reduce(lambda a, b: And(a, b), append_when)
+            iterator = Filter(
+                Lambda(Identifier(identifier), condition), iterator)
+
+        # The stack of the last block in the path (excluding loop_placeholder)
+        # should now contain a ListCons(head, tail), where head is what gets
+        # appened to the list in the comprehension's body ; or, in the case of
+        # nested loops, a Project().
+        source_list = next(item for item in path[-2].stack
+                           if isinstance(item, (ListCons, Project)))
+
+        if isinstance(source_list, ListCons):
+            source_expression = substitute(source_list.head, environment)
+        else:
+            source_expression = source_list
+
+        # The trick, now, is just to replace that list with a Project().
+        self.stack[-1] = Project(
+            Lambda(Identifier(identifier), source_expression), iterator)
+
+    def express(self):
+        # We don't want to turn our loop comprehensions into expressions, but
+        # rather replace the list on top of the stack, which was supposed to
+        # be filled during the iterations of the loop, with a Project(...).
+        if self.next is None:
+            self.expression = Null()
+        else:
+            self.expression = self.next.expression
+
+
 class PlaceholderBlock(Block):
     def __init__(self, context, expression):
         super().__init__(context)
         self.expression = expression
 
+    def execute(self, starting_stack=[], starting_env={}):
+        # We don't want to call super().execute() because that might raise a
+        # PredecessorStacksError, as we use the same PlaceholderBlock in
+        # different branches of While and For loops for instance.
+        pass
+
     def express(self):
         pass
 
 
-def decompile_code(code):
+def decompile(code):
     decompiler = Decompiler()
-    decompiler.build_graph(dis.get_instructions(code))
+    decompiler.comprehension_mode =\
+        code.co_name in ['<listcomp>', '<setcomp>', '<dictcomp>', '<genexpr>']
+
+    decompiler.build_graph(list(dis.get_instructions(code)))
     decompiler.sort_blocks()
+    decompiler.detach_unreachable()
     decompiler.execute_blocks()
     decompiler.express_blocks()
 
-    return decompiler.first_block.expression
-
-
-def decompile_comprehension(code):
-    pass
-
-
-def decompile(code):
-    # We treat the case of comprehensions and generator expressions a bit
-    # differently, as we want to turn them into Project() operations directly.
-    if code.co_name in ['<listcomp>', '<setcomp>', '<dictcomp>', '<genexpr>']:
-        inner = decompile_comprehension(code)
-    else:
-        inner = decompile_code(code)
+    inner = decompiler.first_block.expression
 
     # Wrap the inner expression around a Lambda function with the right
     # argument names. This works because, apparently, the names of the
@@ -643,20 +894,24 @@ def decompile(code):
 
 
 def preview(code):
-    TYPES = ['NORMAL_FLOW', 'JUMP_FLOW']
-
-    graph = graphviz.Digraph()
-
     decompiler = Decompiler()
-    decompiler.build_graph(dis.get_instructions(code))
+    decompiler.build_graph(list(dis.get_instructions(code)))
 
     dis.dis(code)
+    display_graph(decompiler)
+
+
+def display_graph(decompiler):
+    TYPES = ['NORMAL_FLOW', 'JUMP_FLOW']
+    graph = graphviz.Digraph()
 
     for block in decompiler.blocks:
         name = block.__class__.__name__
 
         if isinstance(block, (JumpBlock, BranchBlock)):
             label = name + '(' + block.instruction.opname + ')'
+        elif isinstance(block, PlaceholderBlock):
+            label = name + '(' + str(block.expression) + ')'
         else:
             offsets = ', '.join(
                 map(lambda instr: str(instr.offset), block.instructions))
@@ -668,7 +923,16 @@ def preview(code):
             graph.edge(
                 str(block.index), str(next.index), label=TYPES[edge_type])
 
-    graph.render('test/cfg.gv', view=True)
+    graph.render('test/%d.gv' % random.randint(0, 9999), view=True)
+
+
+def print_state(decompiler):
+    for block in decompiler.blocks:
+        if hasattr(block, 'stack'):
+            print('[%d] Stack: %s' % (block.index, str(block.stack)))
+
+        if hasattr(block, 'bindings'):
+            print('    Bindings: %s' % str(block.bindings))
 
 
 def foo(x, z):
@@ -681,7 +945,7 @@ def foo(x, z):
 
 def bar(x):
     for z in range(x, 0, -1):
-        print(z)
+        w = print(z)
     return None
 
 def bor(x):

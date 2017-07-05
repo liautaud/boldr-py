@@ -1,5 +1,6 @@
 from . import *
 
+import types
 import collections
 import google.protobuf
 import qir_pb2
@@ -74,8 +75,13 @@ def encode(value):
         return encode_dict(value)
     elif isinstance(value, collections.Iterable):
         return encode_list(list(value))
+    elif isinstance(value, types.FunctionType):
+        return encode(value.__code__)
+    elif isinstance(value, types.CodeType):
+        from . import decompile
+        return decompile.decompile(value)
 
-    raise TypeError
+    raise TypeError('Got %s' % value)
 
 
 def encode_dict(source):
@@ -94,3 +100,15 @@ def encode_list(source):
 
 def decode(expression):
     return expression.decode()
+
+
+def substitute(expression, environment):
+    if (isinstance(expression, Identifier) and
+        expression.name in environment):
+        return environment[expression.name]
+    elif isinstance(expression, base.Expression):
+        args = [substitute(getattr(expression, field[0]), environment)
+                for field in expression.fields]
+        return expression.__class__(*args)
+    else:
+        return expression

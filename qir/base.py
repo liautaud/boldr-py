@@ -35,7 +35,7 @@ class Expression:
         if len(args) != len(self.fields):
             raise TypeError(
                 'Expected %d arguments for %s, got %d' %
-                (len(self.fields), self.__name__, len(args)))
+                (len(self.fields), self.__class__.__name__, len(args)))
 
         for field, argument in zip(self.fields, args):
             if not isinstance(argument, field[1]):
