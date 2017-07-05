@@ -25,8 +25,7 @@ BRANCH_MAY_POP_OPNAMES = [
 
 BRANCH_OPNAMES = \
     BRANCH_POP_OPNAMES + \
-    BRANCH_MAY_POP_OPNAMES + \
-    ['FOR_ITER']
+    BRANCH_MAY_POP_OPNAMES
 
 
 class PredecessorStacksError(Exception):
@@ -112,6 +111,10 @@ class Decompiler():
 
             elif instruction.opname in BRANCH_OPNAMES:
                 self.blocks.append(BranchBlock(self, instruction))
+                force_new = True
+
+            elif instruction.opname == 'FOR_ITER':
+                self.blocks.append(ForIterBlock(self, instruction))
                 force_new = True
 
             else:
@@ -227,7 +230,7 @@ class Block():
         # not yet reached a RETURN_VALUE instruction, we still have to declare
         # that the block contains the new instruction, otherwise we might break
         # the translation from jump offsets to blocks that happens in
-        # JumpBlock@close and BranchBlock@close.
+        # JumpBlock@close, BranchBlock@close and ForIterBlock@close.
         self.context.block_mapping[instruction.offset] = self
 
         if instruction.opname == 'RETURN_VALUE':
@@ -276,7 +279,7 @@ class Block():
             # popped right before the jump depending on the precise branching
             # instruction and the type of edge that links this block to the
             # predecessor.
-            if isinstance(predecessor, BranchBlock):
+            if isinstance(predecessor, (BranchBlock, ForIterBlock)):
                 name = predecessor.instruction.opname
                 if ((name == 'FOR_ITER' and
                         edge_type == NORMAL_FLOW) or
@@ -526,7 +529,7 @@ class JumpBlock(Block):
         self.expression = self.next.expression
 
 
-class BranchBlock(Block):
+class BaseBranchBlock(Block):
     def __init__(self, context, instruction):
         super().__init__(context)
         self.instruction = instruction
@@ -544,22 +547,9 @@ class BranchBlock(Block):
         # to the block to go to if we take the jump.
         self.next_jumped = self.context.block_mapping[self.instruction.argval]
 
-    def execute(self, starting_stack=[], starting_env={}):
-        super().execute(starting_stack, starting_env)
 
-        # If the block's instruction is FOR_ITER, we have to push a reference
-        # to the current value of the iterator on the stack, so that blocks
-        # inside the loop's body can use it. We use the instruction's offset
-        # as a way to avoid name clashes in nested loops.
-        if self.instruction.opname == 'FOR_ITER':
-            identifier = 'cv_' + str(self.instruction.offset)
-            self.stack.append(Identifier(identifier))
-
+class BranchBlock(BaseBranchBlock):
     def express(self):
-        if self.instruction.opname == 'FOR_ITER':
-            self.expression = self.next.expression
-            return
-
         condition = self.stack[-1]
 
         if self.instruction.opname in \
@@ -573,6 +563,19 @@ class BranchBlock(Block):
             on_false = self.next.expression
 
         self.expression = Conditional(condition, on_true, on_false)
+
+
+class ForIterBlock(BaseBranchBlock):
+    def execute(self, starting_stack=[], starting_env={}):
+        super().execute(starting_stack, starting_env)
+
+        # We must push a reference to the current value of the iterator on the
+        # stack, so that blocks inside the loop's body can use it. We use the
+        # instruction's offset as a way to avoid name clashes in nested loops.
+        self.stack.append(Identifier('cv_' + str(self.instruction.offset)))
+
+    def express(self):
+        self.expression = self.next.expression
 
 
 class LoopBlock(Block):
@@ -744,7 +747,7 @@ class ForLoopBlock(LoopBlock):
                                             Lambda(
                                                 Identifier('current_iterator'),
                                                 on_loop
-                                            ),
+                                            )
                                         )
                                     )
                                 )))),
@@ -804,8 +807,7 @@ class ComprehensionLoopBlock(LoopBlock):
                 for (key, value) in block.bindings:
                     environment[key] = value
 
-            elif (isinstance(block, BranchBlock) and
-                  block.instruction.opname != 'FOR_ITER'):
+            elif isinstance(block, BranchBlock):
                 condition = substitute(block.stack[-1], environment)
                 is_normal_flow = (path[i + 1].index == block.next.index)
 
@@ -908,7 +910,7 @@ def display_graph(decompiler):
     for block in decompiler.blocks:
         name = block.__class__.__name__
 
-        if isinstance(block, (JumpBlock, BranchBlock)):
+        if isinstance(block, (JumpBlock, BranchBlock, ForIterBlock)):
             label = name + '(' + block.instruction.opname + ')'
         elif isinstance(block, PlaceholderBlock):
             label = name + '(' + str(block.expression) + ')'
