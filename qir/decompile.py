@@ -292,9 +292,9 @@ class Block():
                 stacks.append(predecessor.stack[:])
 
         if len(stacks) < 1:
-            self.stack = starting_stack
+            self.stack = starting_stack[:]
         elif any(stacks[0] != stack for stack in stacks[1:]):
-            raise PredecessorStacksError
+            raise PredecessorStacksError((self.index, stacks))
         else:
             self.stack = stacks[0]
 
@@ -408,8 +408,12 @@ class LinearBlock(Block):
 
             elif (name == 'LOAD_NAME' or
                   name == 'LOAD_GLOBAL' or
-                  name == 'LOAD_FAST'):
+                  name == 'LOAD_FAST' or
+                  name == 'LOAD_DEREF'):
                 stack.append(Identifier(instruction.argval))
+
+            elif name == 'LOAD_CLOSURE':
+                pass
 
             elif name == 'LOAD_ATTR':
                 container = stack.pop()
@@ -481,6 +485,13 @@ class LinearBlock(Block):
                     raise errors.NotYetImplementedError
 
                 stack.pop()
+
+            elif name == 'MAKE_CLOSURE':
+                if instruction.argval > 0:
+                    raise errors.NotYetImplementedError
+
+                stack.pop()
+                stack.pop(-2)
 
             elif name == 'SETUP_LOOP':
                 pass
@@ -791,7 +802,7 @@ class ComprehensionLoopBlock(LoopBlock):
         # We keep an environment with the current bindings of all variables so
         # that we can try to substitute identifiers with their values in the
         # terms we encounter along the path.
-        environment = starting_env
+        environment = starting_env.copy()
 
         # We also build a conjunction of QIR expressions which must evaluate
         # to True in order for the path to be taken.
@@ -833,8 +844,8 @@ class ComprehensionLoopBlock(LoopBlock):
 
         # The stack of the last block in the path (excluding loop_placeholder)
         # should now contain a ListCons(head, tail), where head is what gets
-        # appened to the list in the comprehension's body ; or, in the case of
-        # nested loops, a Project().
+        # appened to the list in the comprehension's body; or, in the case of
+        # nested loops, a Project() expression.
         source_list = next(item for item in path[-2].stack
                            if isinstance(item, (ListCons, Project)))
 
