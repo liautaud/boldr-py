@@ -8,16 +8,8 @@ SERVER_PORT = 8080
 
 
 # TODO:
-# - Finding a way to evaluate lambda functions locally without dirty hacks,
-#   for instance by passing on an environment containing the bindings in
-#   the current scope. Then, evaluateing a lambda would just mean evaluating
-#   its body in the new environment.
 # - Creating a fluent interface to construct QIR expressions, which would
 #   automatically handle making calls to encode() and decode().
-# - Finding out how to make sure that evaluate gets called on an expression
-#   as late as possible.
-# - Handling the encoding and decoding of QIR expressions to native Python
-#   values.
 
 
 class Expression:
@@ -65,10 +57,10 @@ class Expression:
         try:
             return self.evaluate_remotely(environment)
 
-        except errors.NotRemotelyEvaluableError:
+        except Exception:
             return self.evaluate_locally(environment)
 
-    def evaluate_remotely(self, environment):
+    def evaluate_remotely(self, environment={}):
         from . import utils
 
         """
@@ -89,7 +81,7 @@ class Expression:
         except errors.NotSerializableError:
             raise errors.NotRemotelyEvaluableError
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         """
         Evaluate the QIR expression directly in Python.
 
@@ -104,14 +96,15 @@ class Expression:
             argument = getattr(self, parameter)
 
             if isinstance(argument, Expression):
-                evaluated.append(argument.evaluate(environment))
+                evaluated.append(argument.evaluate_locally(environment))
             else:
                 evaluated.append(argument)
 
         return self.__class__(*evaluated)
 
     def decode(self):
-        raise errors.NotDecodableError
+        print(self)
+        raise errors.NotDecodableError()
 
 
 class UnserializableExpression(Expression):

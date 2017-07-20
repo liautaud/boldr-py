@@ -294,6 +294,14 @@ class Block():
         if len(stacks) < 1:
             self.stack = starting_stack[:]
         elif any(stacks[0] != stack for stack in stacks[1:]):
+            # Just a little bit of debugging.
+            for index in self.context.ordering:
+                if index == self.index:
+                    break
+
+                block = self.context.blocks[index]
+                print('[%d] %s' % (index, str(block.stack)))
+
             raise PredecessorStacksError((self.index, stacks))
         else:
             self.stack = stacks[0]
@@ -925,6 +933,11 @@ def display_graph(decompiler):
             label = name + '(' + block.instruction.opname + ')'
         elif isinstance(block, PlaceholderBlock):
             label = name + '(' + str(block.expression) + ')'
+        elif (isinstance(block, LinearBlock) and
+              len(block.instructions) == 1):
+            instr = block.instructions[0]
+            operation = instr.opname + '(' + str(instr.argval) + ')'
+            label = name + '(' + operation + ')'
         else:
             offsets = ', '.join(
                 map(lambda instr: str(instr.offset), block.instructions))

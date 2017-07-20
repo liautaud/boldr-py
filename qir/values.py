@@ -11,7 +11,7 @@ class Value(base.Expression):
 
     This class is abstract, and should not be instantiated directly.
     """
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         return self
 
     def decode(self):

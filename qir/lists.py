@@ -14,7 +14,7 @@ class ListNil(ListConstr):
     """ A QIR expression representing the empty list constructor. """
     fields = ()
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         return self
 
     def decode(self):
@@ -27,10 +27,10 @@ class ListCons(ListConstr):
         ('head', base.Expression),
         ('tail', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         return ListCons(
-            self.head.evaluate(environment),
-            self.tail.evaluate(environment))
+            self.head.evaluate_locally(environment),
+            self.tail.evaluate_locally(environment))
 
     def decode(self):
         return (self.head().decode(),) + self.tail().decode()
@@ -48,16 +48,16 @@ class ListDestr(base.Expression):
         ('on_nil', base.Expression),
         ('on_cons', base.Expression))
 
-    def evaluate_locally(self, environment):
-        input = self.input.evaluate(environment)
+    def evaluate_locally(self, environment={}):
+        input = self.input.evaluate_locally(environment)
 
         if isinstance(input, ListNil):
-            return self.on_nil.evaluate(environment)
+            return self.on_nil.evaluate_locally(environment)
         elif isinstance(input, ListCons):
             return \
                 functions.Application(
                     functions.Application(
-                        self.on_cons.evaluate(environment),
+                        self.on_cons.evaluate_locally(environment),
                         input.head),
                     input.tail
                 ).evaluate(environment)

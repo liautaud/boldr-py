@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='qir.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\tqir.proto\"\x06\n\x04Null\"\x17\n\x06Number\x12\r\n\x05value\x18\x01 \x01(\x05\"\x17\n\x06\x44ouble\x12\r\n\x05value\x18\x01 \x01(\x01\"\x17\n\x06String\x12\r\n\x05value\x18\x01 \x01(\t\"\x18\n\x07\x42oolean\x12\r\n\x05value\x18\x01 \x01(\x08\"\"\n\x04Scan\x12\x1a\n\x05table\x18\x01 \x01(\x0b\x32\x0b.Expression\"B\n\x07Project\x12\x1b\n\x06\x66ormat\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"A\n\x06\x46ilter\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"]\n\x04Sort\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1e\n\tascending\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x03 \x01(\x0b\x32\x0b.Expression\"?\n\x05Limit\x12\x1a\n\x05limit\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Group\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"Z\n\x04Join\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04left\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x03 \x01(\x0b\x32\x0b.Expression\"\x1a\n\nIdentifier\x12\x0c\n\x04name\x18\x01 \x01(\t\"C\n\x06Lambda\x12\x1e\n\tparameter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x0b.Expression\"K\n\x0b\x41pplication\x12\x1d\n\x08\x66unction\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08\x61rgument\x18\x02 \x01(\x0b\x32\x0b.Expression\"j\n\x0b\x43onditional\x12\x1e\n\tcondition\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_true\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08on_false\x18\x03 \x01(\x0b\x32\x0b.Expression\"\t\n\x07ListNil\"@\n\x08ListCons\x12\x19\n\x04head\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x02 \x01(\x0b\x32\x0b.Expression\"b\n\tListDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1b\n\x06on_nil\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_cons\x18\x03 \x01(\x0b\x32\x0b.Expression\"\n\n\x08TupleNil\"\\\n\tTupleCons\x12\x18\n\x03key\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05value\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x03 \x01(\x0b\x32\x0b.Expression\"B\n\nTupleDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x18\n\x03key\x18\x02 \x01(\x0b\x32\x0b.Expression\"\x17\n\x07\x42uiltin\x12\x0c\n\x04name\x18\x01 \x01(\t\"(\n\x05Table\x12\x10\n\x08\x64\x61tabase\x18\x01 \x01(\t\x12\r\n\x05table\x18\x02 \x01(\t\"\xc6\x05\n\nExpression\x12\x15\n\x04Null\x18\x01 \x01(\x0b\x32\x05.NullH\x00\x12\x19\n\x06Number\x18\x02 \x01(\x0b\x32\x07.NumberH\x00\x12\x19\n\x06\x44ouble\x18\x03 \x01(\x0b\x32\x07.DoubleH\x00\x12\x19\n\x06String\x18\x04 \x01(\x0b\x32\x07.StringH\x00\x12\x1b\n\x07\x42oolean\x18\x05 \x01(\x0b\x32\x08.BooleanH\x00\x12\x15\n\x04Scan\x18\x06 \x01(\x0b\x32\x05.ScanH\x00\x12\x19\n\x06\x46ilter\x18\x07 \x01(\x0b\x32\x07.FilterH\x00\x12\x1b\n\x07Project\x18\x08 \x01(\x0b\x32\x08.ProjectH\x00\x12\x15\n\x04Sort\x18\t \x01(\x0b\x32\x05.SortH\x00\x12\x17\n\x05Limit\x18\n \x01(\x0b\x32\x06.LimitH\x00\x12\x17\n\x05Group\x18\x0b \x01(\x0b\x32\x06.GroupH\x00\x12\x15\n\x04Join\x18\x0c \x01(\x0b\x32\x05.JoinH\x00\x12!\n\nIdentifier\x18\r \x01(\x0b\x32\x0b.IdentifierH\x00\x12\x19\n\x06Lambda\x18\x0e \x01(\x0b\x32\x07.LambdaH\x00\x12#\n\x0b\x41pplication\x18\x0f \x01(\x0b\x32\x0c.ApplicationH\x00\x12#\n\x0b\x43onditional\x18\x10 \x01(\x0b\x32\x0c.ConditionalH\x00\x12\x1b\n\x07ListNil\x18\x11 \x01(\x0b\x32\x08.ListNilH\x00\x12\x1d\n\x08ListCons\x18\x12 \x01(\x0b\x32\t.ListConsH\x00\x12\x1f\n\tListDestr\x18\x13 \x01(\x0b\x32\n.ListDestrH\x00\x12\x1d\n\x08TupleNil\x18\x14 \x01(\x0b\x32\t.TupleNilH\x00\x12\x1f\n\tTupleCons\x18\x15 \x01(\x0b\x32\n.TupleConsH\x00\x12!\n\nTupleDestr\x18\x16 \x01(\x0b\x32\x0b.TupleDestrH\x00\x12\x1b\n\x07\x42uiltin\x18\x17 \x01(\x0b\x32\x08.BuiltinH\x00\x12\x17\n\x05Table\x18\x18 \x01(\x0b\x32\x06.TableH\x00\x42\x06\n\x04node23\n\tEvaluator\x12&\n\x08\x45valuate\x12\x0b.Expression\x1a\x0b.Expression\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\tqir.proto\"\x06\n\x04Null\"\x17\n\x06Number\x12\r\n\x05value\x18\x01 \x01(\x05\"\x17\n\x06\x44ouble\x12\r\n\x05value\x18\x01 \x01(\x01\"\x17\n\x06String\x12\r\n\x05value\x18\x01 \x01(\t\"\x18\n\x07\x42oolean\x12\r\n\x05value\x18\x01 \x01(\x08\"\"\n\x04Scan\x12\x1a\n\x05table\x18\x01 \x01(\x0b\x32\x0b.Expression\"B\n\x07Project\x12\x1b\n\x06\x66ormat\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"A\n\x06\x46ilter\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"]\n\x04Sort\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1e\n\tascending\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x03 \x01(\x0b\x32\x0b.Expression\"?\n\x05Limit\x12\x1a\n\x05limit\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Group\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"Z\n\x04Join\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04left\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x03 \x01(\x0b\x32\x0b.Expression\"#\n\x03Not\x12\x1c\n\x07\x65lement\x18\x01 \x01(\x0b\x32\x0b.Expression\"<\n\x03\x44iv\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Minus\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"<\n\x03Mod\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"=\n\x04Plus\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"=\n\x04Star\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Power\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"<\n\x03\x41nd\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\";\n\x02Or\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05\x45qual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"E\n\x0cLowerOrEqual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"B\n\tLowerThan\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"G\n\x0eGreaterOrEqual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"D\n\x0bGreaterThan\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"\x1a\n\nIdentifier\x12\x0c\n\x04name\x18\x01 \x01(\t\"C\n\x06Lambda\x12\x1e\n\tparameter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x0b.Expression\"\x07\n\x05\x46ixed\"K\n\x0b\x41pplication\x12\x1d\n\x08\x66unction\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08\x61rgument\x18\x02 \x01(\x0b\x32\x0b.Expression\"j\n\x0b\x43onditional\x12\x1e\n\tcondition\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_true\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08on_false\x18\x03 \x01(\x0b\x32\x0b.Expression\"\t\n\x07ListNil\"@\n\x08ListCons\x12\x19\n\x04head\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x02 \x01(\x0b\x32\x0b.Expression\"b\n\tListDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1b\n\x06on_nil\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_cons\x18\x03 \x01(\x0b\x32\x0b.Expression\"\n\n\x08TupleNil\"\\\n\tTupleCons\x12\x18\n\x03key\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05value\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x03 \x01(\x0b\x32\x0b.Expression\"B\n\nTupleDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x18\n\x03key\x18\x02 \x01(\x0b\x32\x0b.Expression\"\'\n\x07\x42uiltin\x12\x0e\n\x06module\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\n\n\x08\x42ytecode\"(\n\x05Table\x12\x10\n\x08\x64\x61tabase\x18\x01 \x01(\t\x12\r\n\x05table\x18\x02 \x01(\t\"\xf7\x08\n\nExpression\x12\x15\n\x04Null\x18\x01 \x01(\x0b\x32\x05.NullH\x00\x12\x19\n\x06Number\x18\x02 \x01(\x0b\x32\x07.NumberH\x00\x12\x19\n\x06\x44ouble\x18\x03 \x01(\x0b\x32\x07.DoubleH\x00\x12\x19\n\x06String\x18\x04 \x01(\x0b\x32\x07.StringH\x00\x12\x1b\n\x07\x42oolean\x18\x05 \x01(\x0b\x32\x08.BooleanH\x00\x12\x15\n\x04Scan\x18\x0b \x01(\x0b\x32\x05.ScanH\x00\x12\x19\n\x06\x46ilter\x18\x0c \x01(\x0b\x32\x07.FilterH\x00\x12\x1b\n\x07Project\x18\r \x01(\x0b\x32\x08.ProjectH\x00\x12\x15\n\x04Sort\x18\x0e \x01(\x0b\x32\x05.SortH\x00\x12\x17\n\x05Limit\x18\x0f \x01(\x0b\x32\x06.LimitH\x00\x12\x17\n\x05Group\x18\x10 \x01(\x0b\x32\x06.GroupH\x00\x12\x15\n\x04Join\x18\x11 \x01(\x0b\x32\x05.JoinH\x00\x12\x13\n\x03Not\x18\x15 \x01(\x0b\x32\x04.NotH\x00\x12\x13\n\x03\x44iv\x18\x16 \x01(\x0b\x32\x04.DivH\x00\x12\x17\n\x05Minus\x18\x17 \x01(\x0b\x32\x06.MinusH\x00\x12\x13\n\x03Mod\x18\x18 \x01(\x0b\x32\x04.ModH\x00\x12\x15\n\x04Plus\x18\x19 \x01(\x0b\x32\x05.PlusH\x00\x12\x15\n\x04Star\x18\x1a \x01(\x0b\x32\x05.StarH\x00\x12\x17\n\x05Power\x18\x1b \x01(\x0b\x32\x06.PowerH\x00\x12\x13\n\x03\x41nd\x18\x1c \x01(\x0b\x32\x04.AndH\x00\x12\x11\n\x02Or\x18\x1d \x01(\x0b\x32\x03.OrH\x00\x12\x17\n\x05\x45qual\x18\x1e \x01(\x0b\x32\x06.EqualH\x00\x12%\n\x0cLowerOrEqual\x18\x1f \x01(\x0b\x32\r.LowerOrEqualH\x00\x12\x1f\n\tLowerThan\x18  \x01(\x0b\x32\n.LowerThanH\x00\x12)\n\x0eGreaterOrEqual\x18! \x01(\x0b\x32\x0f.GreaterOrEqualH\x00\x12#\n\x0bGreaterThan\x18\" \x01(\x0b\x32\x0c.GreaterThanH\x00\x12!\n\nIdentifier\x18) \x01(\x0b\x32\x0b.IdentifierH\x00\x12\x19\n\x06Lambda\x18* \x01(\x0b\x32\x07.LambdaH\x00\x12\x18\n\x05\x46ixed\x18+ \x01(\x0b\x32\x07.LambdaH\x00\x12#\n\x0b\x41pplication\x18, \x01(\x0b\x32\x0c.ApplicationH\x00\x12#\n\x0b\x43onditional\x18- \x01(\x0b\x32\x0c.ConditionalH\x00\x12\x1b\n\x07ListNil\x18\x33 \x01(\x0b\x32\x08.ListNilH\x00\x12\x1d\n\x08ListCons\x18\x34 \x01(\x0b\x32\t.ListConsH\x00\x12\x1f\n\tListDestr\x18\x35 \x01(\x0b\x32\n.ListDestrH\x00\x12\x1d\n\x08TupleNil\x18= \x01(\x0b\x32\t.TupleNilH\x00\x12\x1f\n\tTupleCons\x18> \x01(\x0b\x32\n.TupleConsH\x00\x12!\n\nTupleDestr\x18? \x01(\x0b\x32\x0b.TupleDestrH\x00\x12\x1b\n\x07\x42uiltin\x18G \x01(\x0b\x32\x08.BuiltinH\x00\x12\x1d\n\x08\x42ytecode\x18H \x01(\x0b\x32\t.BytecodeH\x00\x12\x17\n\x05Table\x18I \x01(\x0b\x32\x06.TableH\x00\x42\x06\n\x04node23\n\tEvaluator\x12&\n\x08\x45valuate\x12\x0b.Expression\x1a\x0b.Expression\"\x00\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -447,6 +447,531 @@ _JOIN = _descriptor.Descriptor(
 )
 
 
+_NOT = _descriptor.Descriptor(
+  name='Not',
+  full_name='Not',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='element', full_name='Not.element', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=609,
+  serialized_end=644,
+)
+
+
+_DIV = _descriptor.Descriptor(
+  name='Div',
+  full_name='Div',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Div.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Div.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=646,
+  serialized_end=706,
+)
+
+
+_MINUS = _descriptor.Descriptor(
+  name='Minus',
+  full_name='Minus',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Minus.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Minus.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=708,
+  serialized_end=770,
+)
+
+
+_MOD = _descriptor.Descriptor(
+  name='Mod',
+  full_name='Mod',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Mod.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Mod.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=772,
+  serialized_end=832,
+)
+
+
+_PLUS = _descriptor.Descriptor(
+  name='Plus',
+  full_name='Plus',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Plus.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Plus.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=834,
+  serialized_end=895,
+)
+
+
+_STAR = _descriptor.Descriptor(
+  name='Star',
+  full_name='Star',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Star.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Star.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=897,
+  serialized_end=958,
+)
+
+
+_POWER = _descriptor.Descriptor(
+  name='Power',
+  full_name='Power',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Power.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Power.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=960,
+  serialized_end=1022,
+)
+
+
+_AND = _descriptor.Descriptor(
+  name='And',
+  full_name='And',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='And.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='And.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1024,
+  serialized_end=1084,
+)
+
+
+_OR = _descriptor.Descriptor(
+  name='Or',
+  full_name='Or',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Or.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Or.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1086,
+  serialized_end=1145,
+)
+
+
+_EQUAL = _descriptor.Descriptor(
+  name='Equal',
+  full_name='Equal',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='Equal.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='Equal.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1147,
+  serialized_end=1209,
+)
+
+
+_LOWEROREQUAL = _descriptor.Descriptor(
+  name='LowerOrEqual',
+  full_name='LowerOrEqual',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='LowerOrEqual.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='LowerOrEqual.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1211,
+  serialized_end=1280,
+)
+
+
+_LOWERTHAN = _descriptor.Descriptor(
+  name='LowerThan',
+  full_name='LowerThan',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='LowerThan.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='LowerThan.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1282,
+  serialized_end=1348,
+)
+
+
+_GREATEROREQUAL = _descriptor.Descriptor(
+  name='GreaterOrEqual',
+  full_name='GreaterOrEqual',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='GreaterOrEqual.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='GreaterOrEqual.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1350,
+  serialized_end=1421,
+)
+
+
+_GREATERTHAN = _descriptor.Descriptor(
+  name='GreaterThan',
+  full_name='GreaterThan',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='left', full_name='GreaterThan.left', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right', full_name='GreaterThan.right', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1423,
+  serialized_end=1491,
+)
+
+
 _IDENTIFIER = _descriptor.Descriptor(
   name='Identifier',
   full_name='Identifier',
@@ -473,8 +998,8 @@ _IDENTIFIER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=609,
-  serialized_end=635,
+  serialized_start=1493,
+  serialized_end=1519,
 )
 
 
@@ -511,8 +1036,32 @@ _LAMBDA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=637,
-  serialized_end=704,
+  serialized_start=1521,
+  serialized_end=1588,
+)
+
+
+_FIXED = _descriptor.Descriptor(
+  name='Fixed',
+  full_name='Fixed',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1590,
+  serialized_end=1597,
 )
 
 
@@ -549,8 +1098,8 @@ _APPLICATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=706,
-  serialized_end=781,
+  serialized_start=1599,
+  serialized_end=1674,
 )
 
 
@@ -594,8 +1143,8 @@ _CONDITIONAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=783,
-  serialized_end=889,
+  serialized_start=1676,
+  serialized_end=1782,
 )
 
 
@@ -618,8 +1167,8 @@ _LISTNIL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=891,
-  serialized_end=900,
+  serialized_start=1784,
+  serialized_end=1793,
 )
 
 
@@ -656,8 +1205,8 @@ _LISTCONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=902,
-  serialized_end=966,
+  serialized_start=1795,
+  serialized_end=1859,
 )
 
 
@@ -701,8 +1250,8 @@ _LISTDESTR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=968,
-  serialized_end=1066,
+  serialized_start=1861,
+  serialized_end=1959,
 )
 
 
@@ -725,8 +1274,8 @@ _TUPLENIL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1068,
-  serialized_end=1078,
+  serialized_start=1961,
+  serialized_end=1971,
 )
 
 
@@ -770,8 +1319,8 @@ _TUPLECONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1080,
-  serialized_end=1172,
+  serialized_start=1973,
+  serialized_end=2065,
 )
 
 
@@ -808,8 +1357,8 @@ _TUPLEDESTR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1174,
-  serialized_end=1240,
+  serialized_start=2067,
+  serialized_end=2133,
 )
 
 
@@ -821,8 +1370,15 @@ _BUILTIN = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='Builtin.name', index=0,
+      name='module', full_name='Builtin.module', index=0,
       number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='Builtin.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -839,8 +1395,32 @@ _BUILTIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1242,
-  serialized_end=1265,
+  serialized_start=2135,
+  serialized_end=2174,
+)
+
+
+_BYTECODE = _descriptor.Descriptor(
+  name='Bytecode',
+  full_name='Bytecode',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2176,
+  serialized_end=2186,
 )
 
 
@@ -877,8 +1457,8 @@ _TABLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1267,
-  serialized_end=1307,
+  serialized_start=2188,
+  serialized_end=2228,
 )
 
 
@@ -926,133 +1506,245 @@ _EXPRESSION = _descriptor.Descriptor(
       options=None),
     _descriptor.FieldDescriptor(
       name='Scan', full_name='Expression.Scan', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Filter', full_name='Expression.Filter', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Project', full_name='Expression.Project', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Sort', full_name='Expression.Sort', index=8,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Limit', full_name='Expression.Limit', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Group', full_name='Expression.Group', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Join', full_name='Expression.Join', index=11,
+      name='Filter', full_name='Expression.Filter', index=6,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Identifier', full_name='Expression.Identifier', index=12,
+      name='Project', full_name='Expression.Project', index=7,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Lambda', full_name='Expression.Lambda', index=13,
+      name='Sort', full_name='Expression.Sort', index=8,
       number=14, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Application', full_name='Expression.Application', index=14,
+      name='Limit', full_name='Expression.Limit', index=9,
       number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Conditional', full_name='Expression.Conditional', index=15,
+      name='Group', full_name='Expression.Group', index=10,
       number=16, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='ListNil', full_name='Expression.ListNil', index=16,
+      name='Join', full_name='Expression.Join', index=11,
       number=17, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='ListCons', full_name='Expression.ListCons', index=17,
-      number=18, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='ListDestr', full_name='Expression.ListDestr', index=18,
-      number=19, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='TupleNil', full_name='Expression.TupleNil', index=19,
-      number=20, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='TupleCons', full_name='Expression.TupleCons', index=20,
+      name='Not', full_name='Expression.Not', index=12,
       number=21, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='TupleDestr', full_name='Expression.TupleDestr', index=21,
+      name='Div', full_name='Expression.Div', index=13,
       number=22, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Builtin', full_name='Expression.Builtin', index=22,
+      name='Minus', full_name='Expression.Minus', index=14,
       number=23, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Table', full_name='Expression.Table', index=23,
+      name='Mod', full_name='Expression.Mod', index=15,
       number=24, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Plus', full_name='Expression.Plus', index=16,
+      number=25, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Star', full_name='Expression.Star', index=17,
+      number=26, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Power', full_name='Expression.Power', index=18,
+      number=27, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='And', full_name='Expression.And', index=19,
+      number=28, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Or', full_name='Expression.Or', index=20,
+      number=29, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Equal', full_name='Expression.Equal', index=21,
+      number=30, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='LowerOrEqual', full_name='Expression.LowerOrEqual', index=22,
+      number=31, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='LowerThan', full_name='Expression.LowerThan', index=23,
+      number=32, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='GreaterOrEqual', full_name='Expression.GreaterOrEqual', index=24,
+      number=33, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='GreaterThan', full_name='Expression.GreaterThan', index=25,
+      number=34, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Identifier', full_name='Expression.Identifier', index=26,
+      number=41, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Lambda', full_name='Expression.Lambda', index=27,
+      number=42, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Fixed', full_name='Expression.Fixed', index=28,
+      number=43, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Application', full_name='Expression.Application', index=29,
+      number=44, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Conditional', full_name='Expression.Conditional', index=30,
+      number=45, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='ListNil', full_name='Expression.ListNil', index=31,
+      number=51, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='ListCons', full_name='Expression.ListCons', index=32,
+      number=52, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='ListDestr', full_name='Expression.ListDestr', index=33,
+      number=53, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='TupleNil', full_name='Expression.TupleNil', index=34,
+      number=61, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='TupleCons', full_name='Expression.TupleCons', index=35,
+      number=62, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='TupleDestr', full_name='Expression.TupleDestr', index=36,
+      number=63, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Builtin', full_name='Expression.Builtin', index=37,
+      number=71, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Bytecode', full_name='Expression.Bytecode', index=38,
+      number=72, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Table', full_name='Expression.Table', index=39,
+      number=73, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1072,8 +1764,8 @@ _EXPRESSION = _descriptor.Descriptor(
       name='node', full_name='Expression.node',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1310,
-  serialized_end=2020,
+  serialized_start=2231,
+  serialized_end=3374,
 )
 
 _SCAN.fields_by_name['table'].message_type = _EXPRESSION
@@ -1091,6 +1783,33 @@ _GROUP.fields_by_name['input'].message_type = _EXPRESSION
 _JOIN.fields_by_name['filter'].message_type = _EXPRESSION
 _JOIN.fields_by_name['left'].message_type = _EXPRESSION
 _JOIN.fields_by_name['right'].message_type = _EXPRESSION
+_NOT.fields_by_name['element'].message_type = _EXPRESSION
+_DIV.fields_by_name['left'].message_type = _EXPRESSION
+_DIV.fields_by_name['right'].message_type = _EXPRESSION
+_MINUS.fields_by_name['left'].message_type = _EXPRESSION
+_MINUS.fields_by_name['right'].message_type = _EXPRESSION
+_MOD.fields_by_name['left'].message_type = _EXPRESSION
+_MOD.fields_by_name['right'].message_type = _EXPRESSION
+_PLUS.fields_by_name['left'].message_type = _EXPRESSION
+_PLUS.fields_by_name['right'].message_type = _EXPRESSION
+_STAR.fields_by_name['left'].message_type = _EXPRESSION
+_STAR.fields_by_name['right'].message_type = _EXPRESSION
+_POWER.fields_by_name['left'].message_type = _EXPRESSION
+_POWER.fields_by_name['right'].message_type = _EXPRESSION
+_AND.fields_by_name['left'].message_type = _EXPRESSION
+_AND.fields_by_name['right'].message_type = _EXPRESSION
+_OR.fields_by_name['left'].message_type = _EXPRESSION
+_OR.fields_by_name['right'].message_type = _EXPRESSION
+_EQUAL.fields_by_name['left'].message_type = _EXPRESSION
+_EQUAL.fields_by_name['right'].message_type = _EXPRESSION
+_LOWEROREQUAL.fields_by_name['left'].message_type = _EXPRESSION
+_LOWEROREQUAL.fields_by_name['right'].message_type = _EXPRESSION
+_LOWERTHAN.fields_by_name['left'].message_type = _EXPRESSION
+_LOWERTHAN.fields_by_name['right'].message_type = _EXPRESSION
+_GREATEROREQUAL.fields_by_name['left'].message_type = _EXPRESSION
+_GREATEROREQUAL.fields_by_name['right'].message_type = _EXPRESSION
+_GREATERTHAN.fields_by_name['left'].message_type = _EXPRESSION
+_GREATERTHAN.fields_by_name['right'].message_type = _EXPRESSION
 _LAMBDA.fields_by_name['parameter'].message_type = _EXPRESSION
 _LAMBDA.fields_by_name['body'].message_type = _EXPRESSION
 _APPLICATION.fields_by_name['function'].message_type = _EXPRESSION
@@ -1120,8 +1839,23 @@ _EXPRESSION.fields_by_name['Sort'].message_type = _SORT
 _EXPRESSION.fields_by_name['Limit'].message_type = _LIMIT
 _EXPRESSION.fields_by_name['Group'].message_type = _GROUP
 _EXPRESSION.fields_by_name['Join'].message_type = _JOIN
+_EXPRESSION.fields_by_name['Not'].message_type = _NOT
+_EXPRESSION.fields_by_name['Div'].message_type = _DIV
+_EXPRESSION.fields_by_name['Minus'].message_type = _MINUS
+_EXPRESSION.fields_by_name['Mod'].message_type = _MOD
+_EXPRESSION.fields_by_name['Plus'].message_type = _PLUS
+_EXPRESSION.fields_by_name['Star'].message_type = _STAR
+_EXPRESSION.fields_by_name['Power'].message_type = _POWER
+_EXPRESSION.fields_by_name['And'].message_type = _AND
+_EXPRESSION.fields_by_name['Or'].message_type = _OR
+_EXPRESSION.fields_by_name['Equal'].message_type = _EQUAL
+_EXPRESSION.fields_by_name['LowerOrEqual'].message_type = _LOWEROREQUAL
+_EXPRESSION.fields_by_name['LowerThan'].message_type = _LOWERTHAN
+_EXPRESSION.fields_by_name['GreaterOrEqual'].message_type = _GREATEROREQUAL
+_EXPRESSION.fields_by_name['GreaterThan'].message_type = _GREATERTHAN
 _EXPRESSION.fields_by_name['Identifier'].message_type = _IDENTIFIER
 _EXPRESSION.fields_by_name['Lambda'].message_type = _LAMBDA
+_EXPRESSION.fields_by_name['Fixed'].message_type = _LAMBDA
 _EXPRESSION.fields_by_name['Application'].message_type = _APPLICATION
 _EXPRESSION.fields_by_name['Conditional'].message_type = _CONDITIONAL
 _EXPRESSION.fields_by_name['ListNil'].message_type = _LISTNIL
@@ -1131,6 +1865,7 @@ _EXPRESSION.fields_by_name['TupleNil'].message_type = _TUPLENIL
 _EXPRESSION.fields_by_name['TupleCons'].message_type = _TUPLECONS
 _EXPRESSION.fields_by_name['TupleDestr'].message_type = _TUPLEDESTR
 _EXPRESSION.fields_by_name['Builtin'].message_type = _BUILTIN
+_EXPRESSION.fields_by_name['Bytecode'].message_type = _BYTECODE
 _EXPRESSION.fields_by_name['Table'].message_type = _TABLE
 _EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Null'])
@@ -1169,11 +1904,56 @@ _EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Join'])
 _EXPRESSION.fields_by_name['Join'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
 _EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Not'])
+_EXPRESSION.fields_by_name['Not'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Div'])
+_EXPRESSION.fields_by_name['Div'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Minus'])
+_EXPRESSION.fields_by_name['Minus'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Mod'])
+_EXPRESSION.fields_by_name['Mod'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Plus'])
+_EXPRESSION.fields_by_name['Plus'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Star'])
+_EXPRESSION.fields_by_name['Star'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Power'])
+_EXPRESSION.fields_by_name['Power'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['And'])
+_EXPRESSION.fields_by_name['And'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Or'])
+_EXPRESSION.fields_by_name['Or'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Equal'])
+_EXPRESSION.fields_by_name['Equal'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['LowerOrEqual'])
+_EXPRESSION.fields_by_name['LowerOrEqual'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['LowerThan'])
+_EXPRESSION.fields_by_name['LowerThan'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['GreaterOrEqual'])
+_EXPRESSION.fields_by_name['GreaterOrEqual'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['GreaterThan'])
+_EXPRESSION.fields_by_name['GreaterThan'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Identifier'])
 _EXPRESSION.fields_by_name['Identifier'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
 _EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Lambda'])
 _EXPRESSION.fields_by_name['Lambda'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Fixed'])
+_EXPRESSION.fields_by_name['Fixed'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
 _EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Application'])
 _EXPRESSION.fields_by_name['Application'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
@@ -1202,6 +1982,9 @@ _EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Builtin'])
 _EXPRESSION.fields_by_name['Builtin'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
 _EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Bytecode'])
+_EXPRESSION.fields_by_name['Bytecode'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Table'])
 _EXPRESSION.fields_by_name['Table'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
 DESCRIPTOR.message_types_by_name['Null'] = _NULL
@@ -1216,8 +1999,23 @@ DESCRIPTOR.message_types_by_name['Sort'] = _SORT
 DESCRIPTOR.message_types_by_name['Limit'] = _LIMIT
 DESCRIPTOR.message_types_by_name['Group'] = _GROUP
 DESCRIPTOR.message_types_by_name['Join'] = _JOIN
+DESCRIPTOR.message_types_by_name['Not'] = _NOT
+DESCRIPTOR.message_types_by_name['Div'] = _DIV
+DESCRIPTOR.message_types_by_name['Minus'] = _MINUS
+DESCRIPTOR.message_types_by_name['Mod'] = _MOD
+DESCRIPTOR.message_types_by_name['Plus'] = _PLUS
+DESCRIPTOR.message_types_by_name['Star'] = _STAR
+DESCRIPTOR.message_types_by_name['Power'] = _POWER
+DESCRIPTOR.message_types_by_name['And'] = _AND
+DESCRIPTOR.message_types_by_name['Or'] = _OR
+DESCRIPTOR.message_types_by_name['Equal'] = _EQUAL
+DESCRIPTOR.message_types_by_name['LowerOrEqual'] = _LOWEROREQUAL
+DESCRIPTOR.message_types_by_name['LowerThan'] = _LOWERTHAN
+DESCRIPTOR.message_types_by_name['GreaterOrEqual'] = _GREATEROREQUAL
+DESCRIPTOR.message_types_by_name['GreaterThan'] = _GREATERTHAN
 DESCRIPTOR.message_types_by_name['Identifier'] = _IDENTIFIER
 DESCRIPTOR.message_types_by_name['Lambda'] = _LAMBDA
+DESCRIPTOR.message_types_by_name['Fixed'] = _FIXED
 DESCRIPTOR.message_types_by_name['Application'] = _APPLICATION
 DESCRIPTOR.message_types_by_name['Conditional'] = _CONDITIONAL
 DESCRIPTOR.message_types_by_name['ListNil'] = _LISTNIL
@@ -1227,6 +2025,7 @@ DESCRIPTOR.message_types_by_name['TupleNil'] = _TUPLENIL
 DESCRIPTOR.message_types_by_name['TupleCons'] = _TUPLECONS
 DESCRIPTOR.message_types_by_name['TupleDestr'] = _TUPLEDESTR
 DESCRIPTOR.message_types_by_name['Builtin'] = _BUILTIN
+DESCRIPTOR.message_types_by_name['Bytecode'] = _BYTECODE
 DESCRIPTOR.message_types_by_name['Table'] = _TABLE
 DESCRIPTOR.message_types_by_name['Expression'] = _EXPRESSION
 
@@ -1314,6 +2113,104 @@ Join = _reflection.GeneratedProtocolMessageType('Join', (_message.Message,), dic
   ))
 _sym_db.RegisterMessage(Join)
 
+Not = _reflection.GeneratedProtocolMessageType('Not', (_message.Message,), dict(
+  DESCRIPTOR = _NOT,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Not)
+  ))
+_sym_db.RegisterMessage(Not)
+
+Div = _reflection.GeneratedProtocolMessageType('Div', (_message.Message,), dict(
+  DESCRIPTOR = _DIV,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Div)
+  ))
+_sym_db.RegisterMessage(Div)
+
+Minus = _reflection.GeneratedProtocolMessageType('Minus', (_message.Message,), dict(
+  DESCRIPTOR = _MINUS,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Minus)
+  ))
+_sym_db.RegisterMessage(Minus)
+
+Mod = _reflection.GeneratedProtocolMessageType('Mod', (_message.Message,), dict(
+  DESCRIPTOR = _MOD,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Mod)
+  ))
+_sym_db.RegisterMessage(Mod)
+
+Plus = _reflection.GeneratedProtocolMessageType('Plus', (_message.Message,), dict(
+  DESCRIPTOR = _PLUS,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Plus)
+  ))
+_sym_db.RegisterMessage(Plus)
+
+Star = _reflection.GeneratedProtocolMessageType('Star', (_message.Message,), dict(
+  DESCRIPTOR = _STAR,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Star)
+  ))
+_sym_db.RegisterMessage(Star)
+
+Power = _reflection.GeneratedProtocolMessageType('Power', (_message.Message,), dict(
+  DESCRIPTOR = _POWER,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Power)
+  ))
+_sym_db.RegisterMessage(Power)
+
+And = _reflection.GeneratedProtocolMessageType('And', (_message.Message,), dict(
+  DESCRIPTOR = _AND,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:And)
+  ))
+_sym_db.RegisterMessage(And)
+
+Or = _reflection.GeneratedProtocolMessageType('Or', (_message.Message,), dict(
+  DESCRIPTOR = _OR,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Or)
+  ))
+_sym_db.RegisterMessage(Or)
+
+Equal = _reflection.GeneratedProtocolMessageType('Equal', (_message.Message,), dict(
+  DESCRIPTOR = _EQUAL,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Equal)
+  ))
+_sym_db.RegisterMessage(Equal)
+
+LowerOrEqual = _reflection.GeneratedProtocolMessageType('LowerOrEqual', (_message.Message,), dict(
+  DESCRIPTOR = _LOWEROREQUAL,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:LowerOrEqual)
+  ))
+_sym_db.RegisterMessage(LowerOrEqual)
+
+LowerThan = _reflection.GeneratedProtocolMessageType('LowerThan', (_message.Message,), dict(
+  DESCRIPTOR = _LOWERTHAN,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:LowerThan)
+  ))
+_sym_db.RegisterMessage(LowerThan)
+
+GreaterOrEqual = _reflection.GeneratedProtocolMessageType('GreaterOrEqual', (_message.Message,), dict(
+  DESCRIPTOR = _GREATEROREQUAL,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:GreaterOrEqual)
+  ))
+_sym_db.RegisterMessage(GreaterOrEqual)
+
+GreaterThan = _reflection.GeneratedProtocolMessageType('GreaterThan', (_message.Message,), dict(
+  DESCRIPTOR = _GREATERTHAN,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:GreaterThan)
+  ))
+_sym_db.RegisterMessage(GreaterThan)
+
 Identifier = _reflection.GeneratedProtocolMessageType('Identifier', (_message.Message,), dict(
   DESCRIPTOR = _IDENTIFIER,
   __module__ = 'qir_pb2'
@@ -1327,6 +2224,13 @@ Lambda = _reflection.GeneratedProtocolMessageType('Lambda', (_message.Message,),
   # @@protoc_insertion_point(class_scope:Lambda)
   ))
 _sym_db.RegisterMessage(Lambda)
+
+Fixed = _reflection.GeneratedProtocolMessageType('Fixed', (_message.Message,), dict(
+  DESCRIPTOR = _FIXED,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Fixed)
+  ))
+_sym_db.RegisterMessage(Fixed)
 
 Application = _reflection.GeneratedProtocolMessageType('Application', (_message.Message,), dict(
   DESCRIPTOR = _APPLICATION,
@@ -1390,6 +2294,13 @@ Builtin = _reflection.GeneratedProtocolMessageType('Builtin', (_message.Message,
   # @@protoc_insertion_point(class_scope:Builtin)
   ))
 _sym_db.RegisterMessage(Builtin)
+
+Bytecode = _reflection.GeneratedProtocolMessageType('Bytecode', (_message.Message,), dict(
+  DESCRIPTOR = _BYTECODE,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Bytecode)
+  ))
+_sym_db.RegisterMessage(Bytecode)
 
 Table = _reflection.GeneratedProtocolMessageType('Table', (_message.Message,), dict(
   DESCRIPTOR = _TABLE,

@@ -17,7 +17,7 @@ class TupleNil(TupleConstr):
     """ A QIR expression representing the empty tuple constructor. """
     fields = ()
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         return self
 
     def decode(self):
@@ -31,11 +31,11 @@ class TupleCons(TupleConstr):
         ('value', base.Expression),
         ('tail', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         return TupleCons(
-            self.key.evaluate(environment),
-            self.value.evaluate(environment),
-            self.tail.evaluate(environment))
+            self.key.evaluate_locally(environment),
+            self.value.evaluate_locally(environment),
+            self.tail.evaluate_locally(environment))
 
     def decode(self):
         decoded = self.tail.decode()
@@ -49,9 +49,9 @@ class TupleDestr(base.Expression):
         ('input', base.Expression),
         ('key', base.Expression))
 
-    def evaluate_locally(self, environment):
-        input = self.input.evaluate(environment)
-        key = self.key.evaluate(environment)
+    def evaluate_locally(self, environment={}):
+        input = self.input.evaluate_locally(environment)
+        key = self.key.evaluate_locally(environment)
 
         if not isinstance(key, values.String):
             return values.Null

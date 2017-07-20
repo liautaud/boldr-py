@@ -23,7 +23,7 @@ class Scan(Operator):
     """
     fields = (('table', base.Expression),)
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError
 
 
@@ -38,7 +38,7 @@ class Filter(Operator):
         ('filter', base.Expression),
         ('input', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError
 
 
@@ -54,7 +54,7 @@ class Project(Operator):
         ('format', base.Expression),
         ('input', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError
 
 
@@ -72,7 +72,7 @@ class Sort(Operator):
         ('ascending', base.Expression),
         ('input', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError
 
 
@@ -87,7 +87,7 @@ class Limit(Operator):
         ('limit', base.Expression),
         ('input', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError
 
 
@@ -103,7 +103,7 @@ class Group(Operator):
         ('rows', base.Expression),
         ('input', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError
 
 
@@ -120,5 +120,5 @@ class Join(Operator):
         ('left', base.Expression),
         ('right', base.Expression))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError

@@ -1,5 +1,7 @@
 from . import base
 from . import errors
+from . import values
+from . import utils
 
 
 class UnaryOperator(base.Expression):
@@ -10,12 +12,18 @@ class UnaryOperator(base.Expression):
     """
     fields = (('element', base.Expression),)
 
-    def evaluate_locally(self, environment):
-        raise errors.NotYetImplementedError
+    def evaluate_locally(self, environment={}):
+        evaluated = self.element.evaluate_locally(environment)
+
+        if not isinstance(evaluated, values.Value):
+            raise errors.NotLocallyEvaluableError
+
+        return utils.encode(self.__class__.operate(evaluated.value))
 
 
 class Not(UnaryOperator):
-    pass
+    def operate(x):
+        return not x
 
 
 class BinaryOperator(base.Expression):
@@ -28,39 +36,79 @@ class BinaryOperator(base.Expression):
         ('left', base.Expression),
         ('right', base.Expression))
 
-    def evaluate_locally(self, environment):
-        raise errors.NotYetImplementedError
+    def evaluate_locally(self, environment={}):
+        evaluated_left = self.left.evaluate_locally(environment)
+        evaluated_right = self.right.evaluate_locally(environment)
+
+        if (not isinstance(evaluated_left, values.Value) or
+            not isinstance(evaluated_right, values.Value)):
+            raise errors.NotLocallyEvaluableError
+
+        return utils.encode(self.__class__.operate(
+            evaluated_left.value,
+            evaluated_right.value))
 
 
 class Div(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x / y
+
 
 class Minus(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x / y
+
 
 class Mod(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x % y
+
 
 class Plus(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x + y
+
 
 class Star(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x * y
+
 
 class Power(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x ** y
+
 
 class And(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x and y
+
 
 class Or(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x or y
+
 
 class Equal(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x == y
+
 
 class LowerOrEqual(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x <= y
+
 
 class LowerThan(BinaryOperator):
-    pass
+    def operate(x, y):
+        return x < y
+
+
+class GreaterOrEqual(BinaryOperator):
+    def operate(x, y):
+        return x >= y
+
+
+class GreaterThan(BinaryOperator):
+    def operate(x, y):
+        return x > y

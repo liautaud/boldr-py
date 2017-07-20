@@ -49,6 +49,78 @@ message Join {
 }
 
 /**
+ * The different types of QIR algebraïc operators.
+ */
+message Not {
+	Expression element = 1;
+}
+
+message Div {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message Minus {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message Mod {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message Plus {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message Star {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message Power {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message And {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message Or {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message Equal {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message LowerOrEqual {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message LowerThan {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message GreaterOrEqual {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+message GreaterThan {
+	Expression left = 1;
+	Expression right = 2;
+}
+
+/**
  * The different types of QIR functional nodes.
  */
 message Identifier {
@@ -59,6 +131,8 @@ message Lambda {
 	Expression parameter = 1;
 	Expression body = 2;
 }
+
+message Fixed {}
 
 message Application {
 	Expression function = 1;
@@ -107,10 +181,15 @@ message TupleDestr {
  * Other special nodes supported by the QIR.
  */
 message Builtin {
-	string name = 1;
+	string module = 1;
+	string name = 2;
 }
 
-message Table  {
+message Bytecode {
+	/* TODO */
+}
+
+message Table {
 	string database = 1;
 	string table = 2;
 }
@@ -125,25 +204,47 @@ message Expression {
 		Double Double = 3;
 		String String = 4;
 		Boolean Boolean = 5;
-		Scan Scan = 6;
-		Filter Filter = 7;
-		Project Project = 8;
-		Sort Sort = 9;
-		Limit Limit = 10;
-		Group Group = 11;
-		Join Join = 12;
-		Identifier Identifier = 13;
-		Lambda Lambda = 14;
-		Application Application = 15;
-		Conditional Conditional = 16;
-		ListNil ListNil = 17;
-		ListCons ListCons = 18;
-		ListDestr ListDestr = 19;
-		TupleNil TupleNil = 20;
-		TupleCons TupleCons = 21;
-		TupleDestr TupleDestr = 22;
-		Builtin Builtin = 23;
-		Table Table = 24;
+
+		Scan Scan = 11;
+		Filter Filter = 12;
+		Project Project = 13;
+		Sort Sort = 14;
+		Limit Limit = 15;
+		Group Group = 16;
+		Join Join = 17;
+
+		Not Not = 21;
+		Div Div = 22;
+		Minus Minus = 23;
+		Mod Mod = 24;
+		Plus Plus = 25;
+		Star Star = 26;
+		Power Power = 27;
+		And And = 28;
+		Or Or = 29;
+		Equal Equal = 30;
+		LowerOrEqual LowerOrEqual = 31;
+		LowerThan LowerThan = 32;
+		GreaterOrEqual GreaterOrEqual = 33;
+		GreaterThan GreaterThan = 34;
+
+		Identifier Identifier = 41;
+		Lambda Lambda = 42;
+		Lambda Fixed = 43;
+		Application Application = 44;
+		Conditional Conditional = 45;
+
+		ListNil ListNil = 51;
+		ListCons ListCons = 52;
+		ListDestr ListDestr = 53;
+
+		TupleNil TupleNil = 61;
+		TupleCons TupleCons = 62;
+		TupleDestr TupleDestr = 63;
+
+		Builtin Builtin = 71;
+		Bytecode Bytecode = 72;
+		Table Table = 73;
 	}
 }
 

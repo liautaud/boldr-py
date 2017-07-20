@@ -3,20 +3,16 @@ from . import errors
 import types
 
 
-class Local(base.UnserializableExpression):
+class Native(base.UnserializableExpression):
     """
-    A special QIR expression which wraps any type of Python value which can't
-    be serialized, and thus must only be evaluated locally.
+    A special QIR expression which wraps any native Python value.
     """
     fields = (('value', object),)
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         return self
 
-    def evalutate_remotely(self):
-        # TODO: This approach (hijacking the evaluate_remotely function) won't
-        # work because be might serialize from a parent. We should hijack the
-        # serialize() function once it exists.
+    def evalutate_remotely(self, environment={}):
         raise errors.NotRemotelyEvaluableError
 
     def decode(self):
@@ -26,12 +22,12 @@ class Local(base.UnserializableExpression):
 class Builtin(base.Expression):
     """ A QIR expression representing a Python builtin function. """
     fields = (
-        ('module', str, False),
+        ('module', str),
         ('name', str),
         ('function', types.BuiltinFunctionType, False))
 
-    def evaluate_locally(self, environment):
-        return Local(self.function)
+    def evaluate_locally(self, environment={}):
+        return Native(self.function)
 
 
 class Bytecode(base.Expression):
@@ -41,7 +37,7 @@ class Bytecode(base.Expression):
     def __repr__(self):
         return 'Bytecode(...)'
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotYetImplementedError
 
 
@@ -51,5 +47,5 @@ class Table(base.Expression):
         ('database', str),
         ('table', str))
 
-    def evaluate_locally(self, environment):
+    def evaluate_locally(self, environment={}):
         raise errors.NotLocallyEvaluableError
