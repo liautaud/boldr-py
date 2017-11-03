@@ -24,6 +24,8 @@ FROM employees AS e
 WHERE e.salary < {salary}
 ```
 
+Where `{salary}` acts as a placeholder for the value of `salary` provided to the function.
+
 
 ## How it works.
 
