@@ -505,7 +505,6 @@ class LinearBlock(Block):
                 pass
 
             elif name == 'GET_ITER':
-                # TODO: Check if this is really the right thing to do.
                 pass
 
             # Other opcodes
@@ -634,6 +633,8 @@ class LoopBlock(Block):
         decompiler.sort_blocks()
         decompiler.detach_unreachable()
 
+        # display_graph(decompiler)
+
         # We then identify the edges which jump back to the start_block, and
         # make them point to a placeholder block instead. This block, once
         # expressed, will turn into a call to on_loop.
@@ -681,7 +682,7 @@ class LoopBlock(Block):
         loop_placeholder.next = None
         after_placeholder.next = None
 
-        display_graph(decompiler)
+        # display_graph(decompiler)
 
         self.loop_placeholder, self.after_placeholder, self.decompiler =\
             loop_placeholder, after_placeholder, decompiler
@@ -959,47 +960,3 @@ def print_state(decompiler):
 
         if hasattr(block, 'bindings'):
             print('    Bindings: %s' % str(block.bindings))
-
-
-def foo(x, z):
-    y = x + 2
-    if y % 2 == 0:
-        z = True
-    else:
-        z = False
-    return z
-
-def bar(x):
-    for z in range(x, 0, -1):
-        w = print(z)
-    return None
-
-def bor(x):
-    y = 0
-    while x + y < 12:
-        if x % 2 == 9:
-            break
-        elif x % 2 == 8:
-            continue
-        y -= 6
-    return 6
-
-def baz(z):
-    if foo:
-        return True
-    else:
-        return False
-
-    return 'bla'
-
-def buz(x, y):
-    if x or y:
-        z = 1
-    else:
-        z = 2
-    return z
-
-def bol(x, y, z):
-    z = z + 1
-    u = x < y < z
-    return u

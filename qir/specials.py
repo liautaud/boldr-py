@@ -35,17 +35,32 @@ class Bytecode(base.Expression):
     fields = (('code', types.CodeType),)
 
     def __repr__(self):
-        return 'Bytecode(...)'
+        return 'Bytecode(<code>)'
 
     def evaluate_locally(self, environment={}):
-        raise errors.NotYetImplementedError
+        return Native(types.FunctionType(self.code))
 
 
-class Table(base.Expression):
+class Database(base.Expression):
     """ A QIR expression representing a reference to a database table. """
     fields = (
-        ('database', str),
-        ('table', str))
+        ('driver', str),
+        ('name', str),
+        ('host', str),
+        ('port', int),
+        ('username', str),
+        ('password', str))
 
     def evaluate_locally(self, environment={}):
         raise errors.NotLocallyEvaluableError
+
+
+class Table(base.Expression):
+    fields = (
+        ('database', Database),
+        ('name', str))
+
+    def evaluate_locally(self, environment={}):
+        # Because the Python client is not directly connected to the database
+        # servers, we must evaluate the node on the QIR server.
+        return self.evaluate_remotely()

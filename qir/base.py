@@ -8,8 +8,11 @@ SERVER_PORT = 8080
 
 
 # TODO:
-# - Creating a fluent interface to construct QIR expressions, which would
-#   automatically handle making calls to encode() and decode().
+# - Implement the method chaining syntax.
+# - Make it easier to configure the target server.
+# - Update qir.proto to match the new QIR specs.
+# - Solve `PredecessorStacksError` systematically.
+# - Double-check the translation of comprehensions.
 
 
 class Expression:

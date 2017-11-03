@@ -2,8 +2,11 @@ from . import *
 
 import types
 import collections
-import google.protobuf
 import qir_pb2
+import marshal
+
+from google.protobuf.message import Message
+
 
 def serialize(expression):
     """
@@ -14,7 +17,7 @@ def serialize(expression):
     """
     message = qir_pb2.Expression()
 
-    def aux(expression, message):
+    def aux(expression, message, wrapped=True):
         if isinstance(expression, base.UnserializableExpression):
             raise errors.NotSerializableError
 
@@ -26,15 +29,23 @@ def serialize(expression):
             lambda field: len(field) < 3 or not field[2],
             expression.fields)
 
-        node = getattr(message, expression.__class__.__name__)
-        node.SetInParent()
+        if wrapped:
+            node = getattr(message, expression.__class__.__name__)
+            node.SetInParent()
+        else:
+            node = message
 
         for field in fields:
             property = getattr(expression, field[0])
+            target = getattr(node, field[0])
 
             # Maybe we need to serialize the property as well?
-            if isinstance(property, base.Expression):
-                aux(property, getattr(node, field[0]))
+            if isinstance(target, qir_pb2.Expression):
+                aux(property, target, True)
+            elif isinstance(target, Message):
+                aux(property, target, False)
+            elif isinstance(property, types.CodeType):
+                setattr(node, field[0], marshal.dumps(property))
             else:
                 setattr(node, field[0], property)
 
@@ -46,7 +57,7 @@ def unserialize(message):
     """
     Transform a Protocol Buffer message into the corresponding QIR expression.
     """
-    if not isinstance(message, google.protobuf.message.Message):
+    if not isinstance(message, Message):
         return message
     elif not isinstance(message, qir_pb2.Expression):
         raise errors.NotUnserializableError
@@ -103,6 +114,8 @@ def decode(expression):
 
 
 def substitute(expression, environment):
+    from .functions import Identifier
+
     if (isinstance(expression, Identifier) and
         expression.name in environment):
         return environment[expression.name]

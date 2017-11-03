@@ -56,7 +56,7 @@ class Div(BinaryOperator):
 
 class Minus(BinaryOperator):
     def operate(x, y):
-        return x / y
+        return x - y
 
 
 class Mod(BinaryOperator):

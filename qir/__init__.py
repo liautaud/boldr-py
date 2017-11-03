@@ -4,6 +4,6 @@ from .algebra import Div, Minus, Mod, Plus, Star, Power, And, Not, Or, Equal, Lo
 from .functions import Identifier, Lambda, Fixed, Application, Conditional
 from .lists import ListNil, ListCons, ListDestr
 from .tuples import TupleNil, TupleCons, TupleDestr
-from .specials import Builtin, Table
+from .specials import Builtin, Database
 from .utils import serialize, unserialize, encode, decode, substitute
 from .magic import local, batch

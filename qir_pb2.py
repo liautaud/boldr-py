@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='qir.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\tqir.proto\"\x06\n\x04Null\"\x17\n\x06Number\x12\r\n\x05value\x18\x01 \x01(\x05\"\x17\n\x06\x44ouble\x12\r\n\x05value\x18\x01 \x01(\x01\"\x17\n\x06String\x12\r\n\x05value\x18\x01 \x01(\t\"\x18\n\x07\x42oolean\x12\r\n\x05value\x18\x01 \x01(\x08\"\"\n\x04Scan\x12\x1a\n\x05table\x18\x01 \x01(\x0b\x32\x0b.Expression\"B\n\x07Project\x12\x1b\n\x06\x66ormat\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"A\n\x06\x46ilter\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"]\n\x04Sort\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1e\n\tascending\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x03 \x01(\x0b\x32\x0b.Expression\"?\n\x05Limit\x12\x1a\n\x05limit\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Group\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"Z\n\x04Join\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04left\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x03 \x01(\x0b\x32\x0b.Expression\"#\n\x03Not\x12\x1c\n\x07\x65lement\x18\x01 \x01(\x0b\x32\x0b.Expression\"<\n\x03\x44iv\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Minus\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"<\n\x03Mod\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"=\n\x04Plus\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"=\n\x04Star\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Power\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"<\n\x03\x41nd\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\";\n\x02Or\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05\x45qual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"E\n\x0cLowerOrEqual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"B\n\tLowerThan\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"G\n\x0eGreaterOrEqual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"D\n\x0bGreaterThan\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"\x1a\n\nIdentifier\x12\x0c\n\x04name\x18\x01 \x01(\t\"C\n\x06Lambda\x12\x1e\n\tparameter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x0b.Expression\"\x07\n\x05\x46ixed\"K\n\x0b\x41pplication\x12\x1d\n\x08\x66unction\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08\x61rgument\x18\x02 \x01(\x0b\x32\x0b.Expression\"j\n\x0b\x43onditional\x12\x1e\n\tcondition\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_true\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08on_false\x18\x03 \x01(\x0b\x32\x0b.Expression\"\t\n\x07ListNil\"@\n\x08ListCons\x12\x19\n\x04head\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x02 \x01(\x0b\x32\x0b.Expression\"b\n\tListDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1b\n\x06on_nil\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_cons\x18\x03 \x01(\x0b\x32\x0b.Expression\"\n\n\x08TupleNil\"\\\n\tTupleCons\x12\x18\n\x03key\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05value\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x03 \x01(\x0b\x32\x0b.Expression\"B\n\nTupleDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x18\n\x03key\x18\x02 \x01(\x0b\x32\x0b.Expression\"\'\n\x07\x42uiltin\x12\x0e\n\x06module\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\n\n\x08\x42ytecode\"(\n\x05Table\x12\x10\n\x08\x64\x61tabase\x18\x01 \x01(\t\x12\r\n\x05table\x18\x02 \x01(\t\"\xf7\x08\n\nExpression\x12\x15\n\x04Null\x18\x01 \x01(\x0b\x32\x05.NullH\x00\x12\x19\n\x06Number\x18\x02 \x01(\x0b\x32\x07.NumberH\x00\x12\x19\n\x06\x44ouble\x18\x03 \x01(\x0b\x32\x07.DoubleH\x00\x12\x19\n\x06String\x18\x04 \x01(\x0b\x32\x07.StringH\x00\x12\x1b\n\x07\x42oolean\x18\x05 \x01(\x0b\x32\x08.BooleanH\x00\x12\x15\n\x04Scan\x18\x0b \x01(\x0b\x32\x05.ScanH\x00\x12\x19\n\x06\x46ilter\x18\x0c \x01(\x0b\x32\x07.FilterH\x00\x12\x1b\n\x07Project\x18\r \x01(\x0b\x32\x08.ProjectH\x00\x12\x15\n\x04Sort\x18\x0e \x01(\x0b\x32\x05.SortH\x00\x12\x17\n\x05Limit\x18\x0f \x01(\x0b\x32\x06.LimitH\x00\x12\x17\n\x05Group\x18\x10 \x01(\x0b\x32\x06.GroupH\x00\x12\x15\n\x04Join\x18\x11 \x01(\x0b\x32\x05.JoinH\x00\x12\x13\n\x03Not\x18\x15 \x01(\x0b\x32\x04.NotH\x00\x12\x13\n\x03\x44iv\x18\x16 \x01(\x0b\x32\x04.DivH\x00\x12\x17\n\x05Minus\x18\x17 \x01(\x0b\x32\x06.MinusH\x00\x12\x13\n\x03Mod\x18\x18 \x01(\x0b\x32\x04.ModH\x00\x12\x15\n\x04Plus\x18\x19 \x01(\x0b\x32\x05.PlusH\x00\x12\x15\n\x04Star\x18\x1a \x01(\x0b\x32\x05.StarH\x00\x12\x17\n\x05Power\x18\x1b \x01(\x0b\x32\x06.PowerH\x00\x12\x13\n\x03\x41nd\x18\x1c \x01(\x0b\x32\x04.AndH\x00\x12\x11\n\x02Or\x18\x1d \x01(\x0b\x32\x03.OrH\x00\x12\x17\n\x05\x45qual\x18\x1e \x01(\x0b\x32\x06.EqualH\x00\x12%\n\x0cLowerOrEqual\x18\x1f \x01(\x0b\x32\r.LowerOrEqualH\x00\x12\x1f\n\tLowerThan\x18  \x01(\x0b\x32\n.LowerThanH\x00\x12)\n\x0eGreaterOrEqual\x18! \x01(\x0b\x32\x0f.GreaterOrEqualH\x00\x12#\n\x0bGreaterThan\x18\" \x01(\x0b\x32\x0c.GreaterThanH\x00\x12!\n\nIdentifier\x18) \x01(\x0b\x32\x0b.IdentifierH\x00\x12\x19\n\x06Lambda\x18* \x01(\x0b\x32\x07.LambdaH\x00\x12\x18\n\x05\x46ixed\x18+ \x01(\x0b\x32\x07.LambdaH\x00\x12#\n\x0b\x41pplication\x18, \x01(\x0b\x32\x0c.ApplicationH\x00\x12#\n\x0b\x43onditional\x18- \x01(\x0b\x32\x0c.ConditionalH\x00\x12\x1b\n\x07ListNil\x18\x33 \x01(\x0b\x32\x08.ListNilH\x00\x12\x1d\n\x08ListCons\x18\x34 \x01(\x0b\x32\t.ListConsH\x00\x12\x1f\n\tListDestr\x18\x35 \x01(\x0b\x32\n.ListDestrH\x00\x12\x1d\n\x08TupleNil\x18= \x01(\x0b\x32\t.TupleNilH\x00\x12\x1f\n\tTupleCons\x18> \x01(\x0b\x32\n.TupleConsH\x00\x12!\n\nTupleDestr\x18? \x01(\x0b\x32\x0b.TupleDestrH\x00\x12\x1b\n\x07\x42uiltin\x18G \x01(\x0b\x32\x08.BuiltinH\x00\x12\x1d\n\x08\x42ytecode\x18H \x01(\x0b\x32\t.BytecodeH\x00\x12\x17\n\x05Table\x18I \x01(\x0b\x32\x06.TableH\x00\x42\x06\n\x04node23\n\tEvaluator\x12&\n\x08\x45valuate\x12\x0b.Expression\x1a\x0b.Expression\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\tqir.proto\"\x06\n\x04Null\"\x17\n\x06Number\x12\r\n\x05value\x18\x01 \x01(\x05\"\x17\n\x06\x44ouble\x12\r\n\x05value\x18\x01 \x01(\x01\"\x17\n\x06String\x12\r\n\x05value\x18\x01 \x01(\t\"\x18\n\x07\x42oolean\x12\r\n\x05value\x18\x01 \x01(\x08\"\"\n\x04Scan\x12\x1a\n\x05table\x18\x01 \x01(\x0b\x32\x0b.Expression\"B\n\x07Project\x12\x1b\n\x06\x66ormat\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"A\n\x06\x46ilter\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"]\n\x04Sort\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1e\n\tascending\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x03 \x01(\x0b\x32\x0b.Expression\"?\n\x05Limit\x12\x1a\n\x05limit\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Group\x12\x19\n\x04rows\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05input\x18\x02 \x01(\x0b\x32\x0b.Expression\"Z\n\x04Join\x12\x1b\n\x06\x66ilter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04left\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x03 \x01(\x0b\x32\x0b.Expression\"#\n\x03Not\x12\x1c\n\x07\x65lement\x18\x01 \x01(\x0b\x32\x0b.Expression\"<\n\x03\x44iv\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Minus\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"<\n\x03Mod\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"=\n\x04Plus\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"=\n\x04Star\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05Power\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"<\n\x03\x41nd\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\";\n\x02Or\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\">\n\x05\x45qual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"E\n\x0cLowerOrEqual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"B\n\tLowerThan\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"G\n\x0eGreaterOrEqual\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"D\n\x0bGreaterThan\x12\x19\n\x04left\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05right\x18\x02 \x01(\x0b\x32\x0b.Expression\"\x1a\n\nIdentifier\x12\x0c\n\x04name\x18\x01 \x01(\t\"C\n\x06Lambda\x12\x1e\n\tparameter\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x0b.Expression\"\x07\n\x05\x46ixed\"K\n\x0b\x41pplication\x12\x1d\n\x08\x66unction\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08\x61rgument\x18\x02 \x01(\x0b\x32\x0b.Expression\"j\n\x0b\x43onditional\x12\x1e\n\tcondition\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_true\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1d\n\x08on_false\x18\x03 \x01(\x0b\x32\x0b.Expression\"\t\n\x07ListNil\"@\n\x08ListCons\x12\x19\n\x04head\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x02 \x01(\x0b\x32\x0b.Expression\"b\n\tListDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1b\n\x06on_nil\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x1c\n\x07on_cons\x18\x03 \x01(\x0b\x32\x0b.Expression\"\n\n\x08TupleNil\"\\\n\tTupleCons\x12\x18\n\x03key\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x1a\n\x05value\x18\x02 \x01(\x0b\x32\x0b.Expression\x12\x19\n\x04tail\x18\x03 \x01(\x0b\x32\x0b.Expression\"B\n\nTupleDestr\x12\x1a\n\x05input\x18\x01 \x01(\x0b\x32\x0b.Expression\x12\x18\n\x03key\x18\x02 \x01(\x0b\x32\x0b.Expression\"\'\n\x07\x42uiltin\x12\x0e\n\x06module\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x18\n\x08\x42ytecode\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x0c\"h\n\x08\x44\x61tabase\x12\x0e\n\x06\x64river\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0c\n\x04port\x18\x04 \x01(\x05\x12\x10\n\x08username\x18\x05 \x01(\t\x12\x10\n\x08password\x18\x06 \x01(\t\"2\n\x05Table\x12\x1b\n\x08\x64\x61tabase\x18\x01 \x01(\x0b\x32\t.Database\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x96\t\n\nExpression\x12\x15\n\x04Null\x18\x01 \x01(\x0b\x32\x05.NullH\x00\x12\x19\n\x06Number\x18\x02 \x01(\x0b\x32\x07.NumberH\x00\x12\x19\n\x06\x44ouble\x18\x03 \x01(\x0b\x32\x07.DoubleH\x00\x12\x19\n\x06String\x18\x04 \x01(\x0b\x32\x07.StringH\x00\x12\x1b\n\x07\x42oolean\x18\x05 \x01(\x0b\x32\x08.BooleanH\x00\x12\x15\n\x04Scan\x18\x0b \x01(\x0b\x32\x05.ScanH\x00\x12\x19\n\x06\x46ilter\x18\x0c \x01(\x0b\x32\x07.FilterH\x00\x12\x1b\n\x07Project\x18\r \x01(\x0b\x32\x08.ProjectH\x00\x12\x15\n\x04Sort\x18\x0e \x01(\x0b\x32\x05.SortH\x00\x12\x17\n\x05Limit\x18\x0f \x01(\x0b\x32\x06.LimitH\x00\x12\x17\n\x05Group\x18\x10 \x01(\x0b\x32\x06.GroupH\x00\x12\x15\n\x04Join\x18\x11 \x01(\x0b\x32\x05.JoinH\x00\x12\x13\n\x03Not\x18\x15 \x01(\x0b\x32\x04.NotH\x00\x12\x13\n\x03\x44iv\x18\x16 \x01(\x0b\x32\x04.DivH\x00\x12\x17\n\x05Minus\x18\x17 \x01(\x0b\x32\x06.MinusH\x00\x12\x13\n\x03Mod\x18\x18 \x01(\x0b\x32\x04.ModH\x00\x12\x15\n\x04Plus\x18\x19 \x01(\x0b\x32\x05.PlusH\x00\x12\x15\n\x04Star\x18\x1a \x01(\x0b\x32\x05.StarH\x00\x12\x17\n\x05Power\x18\x1b \x01(\x0b\x32\x06.PowerH\x00\x12\x13\n\x03\x41nd\x18\x1c \x01(\x0b\x32\x04.AndH\x00\x12\x11\n\x02Or\x18\x1d \x01(\x0b\x32\x03.OrH\x00\x12\x17\n\x05\x45qual\x18\x1e \x01(\x0b\x32\x06.EqualH\x00\x12%\n\x0cLowerOrEqual\x18\x1f \x01(\x0b\x32\r.LowerOrEqualH\x00\x12\x1f\n\tLowerThan\x18  \x01(\x0b\x32\n.LowerThanH\x00\x12)\n\x0eGreaterOrEqual\x18! \x01(\x0b\x32\x0f.GreaterOrEqualH\x00\x12#\n\x0bGreaterThan\x18\" \x01(\x0b\x32\x0c.GreaterThanH\x00\x12!\n\nIdentifier\x18) \x01(\x0b\x32\x0b.IdentifierH\x00\x12\x19\n\x06Lambda\x18* \x01(\x0b\x32\x07.LambdaH\x00\x12\x18\n\x05\x46ixed\x18+ \x01(\x0b\x32\x07.LambdaH\x00\x12#\n\x0b\x41pplication\x18, \x01(\x0b\x32\x0c.ApplicationH\x00\x12#\n\x0b\x43onditional\x18- \x01(\x0b\x32\x0c.ConditionalH\x00\x12\x1b\n\x07ListNil\x18\x33 \x01(\x0b\x32\x08.ListNilH\x00\x12\x1d\n\x08ListCons\x18\x34 \x01(\x0b\x32\t.ListConsH\x00\x12\x1f\n\tListDestr\x18\x35 \x01(\x0b\x32\n.ListDestrH\x00\x12\x1d\n\x08TupleNil\x18= \x01(\x0b\x32\t.TupleNilH\x00\x12\x1f\n\tTupleCons\x18> \x01(\x0b\x32\n.TupleConsH\x00\x12!\n\nTupleDestr\x18? \x01(\x0b\x32\x0b.TupleDestrH\x00\x12\x1b\n\x07\x42uiltin\x18G \x01(\x0b\x32\x08.BuiltinH\x00\x12\x1d\n\x08\x42ytecode\x18H \x01(\x0b\x32\t.BytecodeH\x00\x12\x1d\n\x08\x44\x61tabase\x18I \x01(\x0b\x32\t.DatabaseH\x00\x12\x17\n\x05Table\x18J \x01(\x0b\x32\x06.TableH\x00\x42\x06\n\x04node23\n\tEvaluator\x12&\n\x08\x45valuate\x12\x0b.Expression\x1a\x0b.Expression\"\x00\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -1407,6 +1407,13 @@ _BYTECODE = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='code', full_name='Bytecode.code', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1420,7 +1427,73 @@ _BYTECODE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=2176,
-  serialized_end=2186,
+  serialized_end=2200,
+)
+
+
+_DATABASE = _descriptor.Descriptor(
+  name='Database',
+  full_name='Database',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='driver', full_name='Database.driver', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='Database.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='host', full_name='Database.host', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='port', full_name='Database.port', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='username', full_name='Database.username', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='password', full_name='Database.password', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2202,
+  serialized_end=2306,
 )
 
 
@@ -1433,13 +1506,13 @@ _TABLE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='database', full_name='Table.database', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='table', full_name='Table.table', index=1,
+      name='name', full_name='Table.name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1457,8 +1530,8 @@ _TABLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2188,
-  serialized_end=2228,
+  serialized_start=2308,
+  serialized_end=2358,
 )
 
 
@@ -1743,8 +1816,15 @@ _EXPRESSION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Table', full_name='Expression.Table', index=39,
+      name='Database', full_name='Expression.Database', index=39,
       number=73, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Table', full_name='Expression.Table', index=40,
+      number=74, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1764,8 +1844,8 @@ _EXPRESSION = _descriptor.Descriptor(
       name='node', full_name='Expression.node',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=2231,
-  serialized_end=3374,
+  serialized_start=2361,
+  serialized_end=3535,
 )
 
 _SCAN.fields_by_name['table'].message_type = _EXPRESSION
@@ -1827,6 +1907,7 @@ _TUPLECONS.fields_by_name['value'].message_type = _EXPRESSION
 _TUPLECONS.fields_by_name['tail'].message_type = _EXPRESSION
 _TUPLEDESTR.fields_by_name['input'].message_type = _EXPRESSION
 _TUPLEDESTR.fields_by_name['key'].message_type = _EXPRESSION
+_TABLE.fields_by_name['database'].message_type = _DATABASE
 _EXPRESSION.fields_by_name['Null'].message_type = _NULL
 _EXPRESSION.fields_by_name['Number'].message_type = _NUMBER
 _EXPRESSION.fields_by_name['Double'].message_type = _DOUBLE
@@ -1866,6 +1947,7 @@ _EXPRESSION.fields_by_name['TupleCons'].message_type = _TUPLECONS
 _EXPRESSION.fields_by_name['TupleDestr'].message_type = _TUPLEDESTR
 _EXPRESSION.fields_by_name['Builtin'].message_type = _BUILTIN
 _EXPRESSION.fields_by_name['Bytecode'].message_type = _BYTECODE
+_EXPRESSION.fields_by_name['Database'].message_type = _DATABASE
 _EXPRESSION.fields_by_name['Table'].message_type = _TABLE
 _EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Null'])
@@ -1985,6 +2067,9 @@ _EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Bytecode'])
 _EXPRESSION.fields_by_name['Bytecode'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
 _EXPRESSION.oneofs_by_name['node'].fields.append(
+  _EXPRESSION.fields_by_name['Database'])
+_EXPRESSION.fields_by_name['Database'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
+_EXPRESSION.oneofs_by_name['node'].fields.append(
   _EXPRESSION.fields_by_name['Table'])
 _EXPRESSION.fields_by_name['Table'].containing_oneof = _EXPRESSION.oneofs_by_name['node']
 DESCRIPTOR.message_types_by_name['Null'] = _NULL
@@ -2026,6 +2111,7 @@ DESCRIPTOR.message_types_by_name['TupleCons'] = _TUPLECONS
 DESCRIPTOR.message_types_by_name['TupleDestr'] = _TUPLEDESTR
 DESCRIPTOR.message_types_by_name['Builtin'] = _BUILTIN
 DESCRIPTOR.message_types_by_name['Bytecode'] = _BYTECODE
+DESCRIPTOR.message_types_by_name['Database'] = _DATABASE
 DESCRIPTOR.message_types_by_name['Table'] = _TABLE
 DESCRIPTOR.message_types_by_name['Expression'] = _EXPRESSION
 
@@ -2301,6 +2387,13 @@ Bytecode = _reflection.GeneratedProtocolMessageType('Bytecode', (_message.Messag
   # @@protoc_insertion_point(class_scope:Bytecode)
   ))
 _sym_db.RegisterMessage(Bytecode)
+
+Database = _reflection.GeneratedProtocolMessageType('Database', (_message.Message,), dict(
+  DESCRIPTOR = _DATABASE,
+  __module__ = 'qir_pb2'
+  # @@protoc_insertion_point(class_scope:Database)
+  ))
+_sym_db.RegisterMessage(Database)
 
 Table = _reflection.GeneratedProtocolMessageType('Table', (_message.Message,), dict(
   DESCRIPTOR = _TABLE,

@@ -186,12 +186,21 @@ message Builtin {
 }
 
 message Bytecode {
-	/* TODO */
+	bytes code = 1;
+}
+
+message Database {
+	string driver = 1;
+	string name = 2;
+	string host = 3;
+	int32 port = 4;
+	string username = 5;
+	string password = 6;
 }
 
 message Table {
-	string database = 1;
-	string table = 2;
+	Database database = 1;
+	string name = 2;
 }
 
 /**
@@ -244,7 +253,8 @@ message Expression {
 
 		Builtin Builtin = 71;
 		Bytecode Bytecode = 72;
-		Table Table = 73;
+		Database Database = 73;
+		Table Table = 74;
 	}
 }
 
